@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100vh;
+        }
+
+        #login .container #login-row #login-column #login-box {
+            margin-top: 80px;
+            max-width: 400px;
+            height: 450px;
+            border: 1px solid #9C9C9C;
+            background-color: #046E8F;
+        }
+
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+
+        #login .container #login-row #login-column #login-box #login-form #register-link {
+            margin-top: -70px;
+        }
+
+        #btoningresar {
+            background: #022834;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login">
+
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <form id="login-form" class="form" action="" method="post">
+                            <h3 class="text-center text-info"><i class="fa fa-book" aria-hidden="true"></i></h3>
+
+                            <div class="form-group">
+                                <label for="username" class="text-info"></label><br>
+                                <input type="text" name="username" id="username" class="form-control"
+                                    placeholder="Nombre de usuario">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password" class="text-info"></label><br>
+                                <input type="password" name="password" id="password" class="form-control"
+                                    placeholder="Contraseña">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_tipo"></label>
+                                <select name="" id="id_tipo" class="form-control">
+                                    <option value="Cliente">Cliente</option>
+                                    <option value="Administrador">Adminsitrador</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <button id="btoningresar" class="form-control">INGRESAR</button>
+                            </div>
+                            <div class="form-group text-center">
+
+                                <a href="#" class="text-info">o <br> Registrarse</a>
+
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

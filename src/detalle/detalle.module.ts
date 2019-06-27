@@ -1,6 +1,22 @@
-import { Controller } from '@nestjs/common';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DetalleEntity } from "./detalle.entity";
 
-@Controller()
+@Module(
+    {
+        imports: [
+            TypeOrmModule.forFeature(
+                [
+                   DetalleEntity
+                ],
+                'default'
+            )
+        ],
+        controllers: [],
+        providers: [],
+        exports: []
+    }
+)
 export class DetalleModule {
 
 }

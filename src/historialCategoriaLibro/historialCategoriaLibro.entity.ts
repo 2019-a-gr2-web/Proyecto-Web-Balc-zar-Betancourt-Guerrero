@@ -1,5 +1,6 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { CategoriaEntity } from '../categoria/categoria.entity';
+import { LibroEntity } from '../libro/libro.entity';
 
 
 
@@ -7,11 +8,11 @@ import { CategoriaEntity } from '../categoria/categoria.entity';
 export class HistorialCategoriaLibroEntity {
 
   @PrimaryGeneratedColumn()
-  id:number;
+  id: number;
 
-  @ManyToOne(type => CategoriaEntity, categoria=>categoria.historialCategoriaLibro)
-  plato: number
-  @ManyToOne(type => ComboEntity, combo=>combo.relacion)
-  combo: number
+  /*@ManyToOne(type => CategoriaEntity, categoria => categoria.historialCategoriaLibro)
+  categoria: number;*/
+  @ManyToOne(type => LibroEntity, libro => libro.historialCategoriaLibro)
+  libro: number;
 
 }

@@ -3,7 +3,7 @@ import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/histor
 
 
 
-@Entity('bd_combo') //Podemos pasr el nombre de la tabla
+@Entity('bd_categoria') //Podemos pasr el nombre de la tabla
 export class CategoriaEntity {
 
   @PrimaryGeneratedColumn()

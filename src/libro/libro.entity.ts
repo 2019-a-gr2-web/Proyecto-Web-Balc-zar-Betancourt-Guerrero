@@ -1,30 +1,67 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { CategoriaEntity } from '../categoria/categoria.entity';
 import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
 
-
-
-@Entity('bd_historialCategoriaLibro') //Podemos pasr el nombre de la tabla
+@Entity('bd_libro')
 export class LibroEntity {
 
   @PrimaryGeneratedColumn()
-  id:number;
+  id: number;
 
   @Column({
     type: 'varchar',
     length: 70,
-    name: 'nombre',
+    name: 'isbn',
   })
-  nombre: string;
+  isbn: string;
 
   @Column({
-    type : 'varchar',
-    name : ''
-
+    type: 'varchar',
+    length: 100,
+    name: 'titulo',
   })
+  titulo: string;
 
+  @Column({
+    type: 'varchar',
+    length: 70,
+    name: 'autor',
+  })
+  autor: string;
 
-  @OneToMany( type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    name: 'edicion',
+    nullable: true
+  })
+  edicion: number;
+
+  @Column({
+    type: 'varchar',
+    length: 70,
+    name: 'editorial',
+  })
+  editorial: string;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    name: 'precio',
+    nullable: true
+  })
+  precio: number;
+
+  @Column({
+    type: 'varchar',
+    length: 70,
+    name: 'estado',
+  })
+  estado: string;
+
+  @OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
   historialCategoriaLibro: HistorialCategoriaLibroEntity[]
 
 
