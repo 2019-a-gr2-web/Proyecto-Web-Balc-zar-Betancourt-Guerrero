@@ -16,7 +16,8 @@ export class DetalleEntity {
     })
     cantidad: number;
 
-
+    @ManyToOne( type => DetalleEntity,detalle=>detalle.id)
+    pedDet: DetalleEntity;
     /*@OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
     historialCategoriaLibro: HistorialCategoriaLibroEntity[]*/
 

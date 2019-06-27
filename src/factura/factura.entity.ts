@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
+import { DetalleEntity } from '../detalle/detalle.entity';
 
 @Entity('bd_factura') //Podemos pasr el nombre de la tabla
 export class FacturaEntity {
@@ -23,7 +24,6 @@ export class FacturaEntity {
     })
     fecha: Date;
 
-
     @Column({
         type: 'decimal',
         precision: 10,
@@ -33,7 +33,7 @@ export class FacturaEntity {
     })
     monto_total: number;
 
-    /*@OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
-    historialCategoriaLibro: HistorialCategoriaLibroEntity[]*/
+    @OneToMany(type => DetalleEntity, detalles => detalles)
+    detalles: DetalleEntity[];
 
 }
