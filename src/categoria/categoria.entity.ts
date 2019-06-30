@@ -1,22 +1,21 @@
 import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
 import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
 
-
-
-@Entity('bd_categoria') //Podemos pasr el nombre de la tabla
+@Entity('categoria') //Podemos pasr el nombre de la tabla
 export class CategoriaEntity {
 
   @PrimaryGeneratedColumn()
   id:number;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 70,
     name: 'nombre',
+    unique: true
   })
   nombre: string;
 
-  @OneToMany( type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
-  historialCategoriaLibro: HistorialCategoriaLibroEntity[]
+  @OneToMany( type => HistorialCategoriaLibroEntity, historialCategoriaLibros => historialCategoriaLibros)
+  historialCategoriaLibros: HistorialCategoriaLibroEntity[]
 
 }

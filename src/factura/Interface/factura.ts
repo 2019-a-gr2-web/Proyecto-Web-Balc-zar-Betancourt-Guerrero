@@ -1,7 +1,7 @@
 export interface Factura {
   id?: number;
-  idUsuario: number;
-  numeroTarjeta: string;
+  fkUsuario: number;
+  numeroTarjeta: number;
   fecha: Date;
   montoTotal: number;
 }

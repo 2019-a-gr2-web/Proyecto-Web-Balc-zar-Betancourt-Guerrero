@@ -1,39 +1,40 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DetalleEntity } from '../detalle/detalle.entity';
+import { UsuarioEntity } from '../usuario/usuario.entity';
 
-@Entity('bd_factura') //Podemos pasr el nombre de la tabla
+@Entity('factura') //Podemos pasr el nombre de la tabla
 export class FacturaEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-        type: 'decimal',
-        precision: 10,
-        scale: 2,
-        name: 'numero_tarjeta',
-        nullable: true
-    })
-    numero_tarjeta: number;
+  @Column({
+    type: 'bigint',
+    name: 'numeroTarjeta',
+    nullable: true,
+  })
+  numeroTarjeta: string;
 
-    @Column({
-        type: 'date',
-        name: 'fecha',
-        default: '2019-12-12'
-    })
-    fecha: Date;
+  @Column({
+    type: 'date',
+    name: 'fecha',
+  })
+  fecha: Date;
 
-    @Column({
-        type: 'decimal',
-        precision: 10,
-        scale: 2,
-        name: 'monto_total',
-        nullable: true
-    })
-    monto_total: number;
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    name: 'montoTotal',
+    nullable: true,
+    default: 0
+  })
+  montoTotal: number;
 
-    @OneToMany(type => DetalleEntity, detalles => detalles)
-    detalles: DetalleEntity[];
+  @ManyToOne(type => UsuarioEntity, usuario => usuario.facturas)
+  fkUsuario: UsuarioEntity;
+
+  @OneToMany(type => DetalleEntity, detalle => detalle)
+  detalles: DetalleEntity[];
 
 }

@@ -1,29 +1,30 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { CategoriaEntity } from '../categoria/categoria.entity';
 import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
+import { DetalleEntity } from '../detalle/detalle.entity';
 
-@Entity('bd_libro')
+@Entity('libro')
 export class LibroEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 70,
     name: 'isbn',
+    unique: true
   })
   isbn: string;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 100,
     name: 'titulo',
   })
   titulo: string;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 70,
     name: 'autor',
   })
@@ -34,12 +35,13 @@ export class LibroEntity {
     precision: 10,
     scale: 2,
     name: 'edicion',
-    nullable: true
+    nullable: true,
+    default: 1
   })
   edicion: number;
 
   @Column({
-    type: 'varchar',
+    type: 'nvarchar',
     length: 70,
     name: 'editorial',
   })
@@ -50,20 +52,20 @@ export class LibroEntity {
     precision: 10,
     scale: 2,
     name: 'precio',
-    nullable: true
   })
   precio: number;
 
   @Column({
-    type: 'varchar',
-    length: 70,
+    type: 'boolean',
     name: 'estado',
+    default: true
   })
-  estado: string;
+  estado: boolean;
 
-  @OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
-  historialCategoriaLibro: HistorialCategoriaLibroEntity[]
+  @OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibros => historialCategoriaLibros)
+  historialCategoriaLibros: HistorialCategoriaLibroEntity[]
 
-
+  @OneToMany(type => DetalleEntity, detalles => detalles)
+  detalles: DetalleEntity[];
 
 }

@@ -1,11 +1,11 @@
-import { Entity, ManyToOne } from "typeorm";
+import { Entity} from "typeorm";
 import { Column } from "typeorm";
 import { PrimaryGeneratedColumn } from "typeorm";
 import { OneToMany } from "typeorm";
 import { UsuarioEntity } from "../usuario/usuario.entity";
 
 
-@Entity('bd_tipousuario') //aqui se pasa el nombre tabla (se puede)
+@Entity('tipousuario') //aqui se pasa el nombre tabla (se puede)
 export class TipoUsuarioEntity {
 
     @PrimaryGeneratedColumn()
@@ -13,11 +13,10 @@ export class TipoUsuarioEntity {
 
     @Column({
         name: 'tipo',
-        type: 'varchar',
+        type: 'nvarchar',
         length: 70
     })
     tipo: string;
-
 
     @OneToMany(type => UsuarioEntity, usuario => usuario)
     usuarios: UsuarioEntity[];
