@@ -1,9 +1,9 @@
 export interface Usuario {
-    idusuario?: number;
+    id?: number;
     usuario: string;
-    password: string;
+    contrasenia: string;
     nombre: string;
     apellido: string;
     cedula: string;
-    tipo: string;
+    idTipo: number;
 }
