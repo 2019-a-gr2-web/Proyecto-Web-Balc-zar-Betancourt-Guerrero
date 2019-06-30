@@ -17,6 +17,7 @@ import { FacturaEntity } from './factura/factura.entity';
 import { DetalleEntity } from './detalle/detalle.entity';
 import { DetalleModule } from './detalle/detalle.module';
 
+
 @Module({
   imports: [
     UsuarioModule, 

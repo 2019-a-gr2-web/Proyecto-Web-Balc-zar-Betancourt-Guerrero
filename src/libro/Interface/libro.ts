@@ -5,6 +5,7 @@ export interface Libro {
   autor: string;
   edicion: number;
   editorial: string;
+  categoria?: number;
   precio: number;
-  estado: boolean;
+  estado: string;
 }

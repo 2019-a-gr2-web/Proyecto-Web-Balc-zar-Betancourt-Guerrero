@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { HistorialCategoriaLibroController } from "./historialCategoriaLibro.controller";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/historialCategoriaLibro.entity";
+import { HistorialCategoriaLibroService } from "./historialCategoriaLibro.service";
 
 @Module(
     {
@@ -14,8 +15,8 @@ import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/histor
             )
         ],
         controllers: [HistorialCategoriaLibroController],
-        providers: [],
-        exports: []
+        providers: [HistorialCategoriaLibroService],
+        exports: [HistorialCategoriaLibroService]
     }
 )
 export class HistorialCategoriaLibroModule {

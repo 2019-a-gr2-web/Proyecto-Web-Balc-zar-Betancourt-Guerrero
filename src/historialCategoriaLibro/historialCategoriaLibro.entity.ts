@@ -6,12 +6,12 @@ import { LibroEntity } from '../libro/libro.entity';
 export class HistorialCategoriaLibroEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne( type => LibroEntity, libro=>libro.historialCategoriaLibros)
-  fkLibro: LibroEntity;
+  fkLibro?: number;
 
   @ManyToOne( type => CategoriaEntity, categoria=>categoria.historialCategoriaLibros)
-  fkCategoria: CategoriaEntity;
+  fkCategoria: number;
 
 }

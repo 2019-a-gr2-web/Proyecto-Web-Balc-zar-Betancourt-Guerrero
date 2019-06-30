@@ -47,7 +47,7 @@ export class UsuarioEntity {
   cedula: number;
 
   @ManyToOne(type => TipoUsuarioEntity, tipousuario => tipousuario.usuarios)
-  fkTipoUsuario: TipoUsuarioEntity;
+  fkTipoUsuario?: number;
 
   @OneToMany(type => FacturaEntity, facturas => facturas)
   facturas: FacturaEntity[];

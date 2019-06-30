@@ -1,4 +1,4 @@
-import { Entity} from "typeorm";
+import { Entity } from "typeorm";
 import { Column } from "typeorm";
 import { PrimaryGeneratedColumn } from "typeorm";
 import { OneToMany } from "typeorm";
@@ -16,9 +16,9 @@ export class TipoUsuarioEntity {
         type: 'nvarchar',
         length: 70
     })
-    tipo: string;
+    tipo: string; 
 
-    @OneToMany(type => UsuarioEntity, usuario => usuario)
-    usuarios: UsuarioEntity[];
+    @OneToMany(type => UsuarioEntity, usuario => usuario, { cascade: true, onDelete: 'CASCADE' })
+    usuarios?: UsuarioEntity[];
 
 }

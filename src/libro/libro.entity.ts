@@ -33,7 +33,7 @@ export class LibroEntity {
   @Column({
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 0,
     name: 'edicion',
     nullable: true,
     default: 1
@@ -56,16 +56,28 @@ export class LibroEntity {
   precio: number;
 
   @Column({
-    type: 'boolean',
+    type: 'nvarchar',
     name: 'estado',
-    default: true
+    default: "Disponible"
   })
-  estado: boolean;
+  estado: string;
 
-  @OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibros => historialCategoriaLibros)
+  @OneToMany(type => HistorialCategoriaLibroEntity,
+    historialCategoriaLibros => historialCategoriaLibros,
+    {
+      cascade: true,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    })
   historialCategoriaLibros: HistorialCategoriaLibroEntity[]
 
-  @OneToMany(type => DetalleEntity, detalles => detalles)
+  @OneToMany(type => DetalleEntity,
+    detalles => detalles,
+    {
+      cascade: true,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    })
   detalles: DetalleEntity[];
 
 }
