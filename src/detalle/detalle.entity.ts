@@ -1,23 +1,25 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { HistorialCategoriaLibroEntity } from '../historialCategoriaLibro/historialCategoriaLibro.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { FacturaEntity } from '../factura/factura.entity';
+import { LibroEntity } from '../libro/libro.entity';
 
-@Entity('bd_detalle') //Podemos pasr el nombre de la tabla
+@Entity('detalle') //Podemos pasr el nombre de la tabla
 export class DetalleEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({
-        type: 'decimal',
-        precision: 10,
-        scale: 2,
+        type: 'int',
         name: 'cantidad',
-        nullable: true
+        nullable: false
     })
     cantidad: number;
 
-    @ManyToOne( type => DetalleEntity,detalle=>detalle.id)
-    pedDet: DetalleEntity;
+    @ManyToOne(type => FacturaEntity, factura => factura.detalles)
+    fkFactura: FacturaEntity;
+
+    @ManyToOne( type => LibroEntity, libro=>libro.detalles)
+    fkLibro: LibroEntity;
     /*@OneToMany(type => HistorialCategoriaLibroEntity, historialCategoriaLibro => historialCategoriaLibro)
     historialCategoriaLibro: HistorialCategoriaLibroEntity[]*/
 
