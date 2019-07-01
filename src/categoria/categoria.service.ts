@@ -26,10 +26,10 @@ export class CategoriaService {
             nombre: 'Accion'
         };
 
-        this.registrarCategoria(categoria1);
+        /*this.registrarCategoria(categoria1);
         this.registrarCategoria(categoria2);
         this.registrarCategoria(categoria3);
-        this.registrarCategoria(categoria4);
+        this.registrarCategoria(categoria4);*/
 
 
     }

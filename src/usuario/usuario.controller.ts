@@ -20,7 +20,7 @@ export class UsuarioController {
 
 
         const userAAutenticar = respuestaAutenticacion[0];
-        console.log(userAAutenticar);
+        //console.log(userAAutenticar);
 
         if (userAAutenticar) {
             session.username = usuario.username;
