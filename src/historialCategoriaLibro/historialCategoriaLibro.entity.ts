@@ -2,7 +2,7 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { CategoriaEntity } from '../categoria/categoria.entity';
 import { LibroEntity } from '../libro/libro.entity';
 
-@Entity('historialCategoriaLibro') //Podemos pasr el nombre de la tabla
+@Entity('historialcategorialibro') //Podemos pasr el nombre de la tabla
 export class HistorialCategoriaLibroEntity {
 
   @PrimaryGeneratedColumn()

@@ -48,7 +48,7 @@ import { DetalleModule } from './detalle/detalle.module';
 
       insecureAuth: true,
 
-      dropSchema: true //borra todos los datos
+      //dropSchema: true //borra todos los datos
 
     }),],
   controllers: [AppController],

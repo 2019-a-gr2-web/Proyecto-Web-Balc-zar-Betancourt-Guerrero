@@ -23,7 +23,7 @@ export class UsuarioService {
             fkTipoUsuario: 1
         }
 
-        this.registrarAdmin(admin);
+        //this.registrarAdmin(admin);
        
     }
 
