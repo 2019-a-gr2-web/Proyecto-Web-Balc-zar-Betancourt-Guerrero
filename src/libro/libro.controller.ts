@@ -11,6 +11,7 @@ import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/histor
 export class LibroController {
 
     estaEditando: boolean = false;
+    idLibroEditando: number = null;
 
     constructor(private readonly _libroService: LibroService,
         private readonly _categoriaService: CategoriaService,
@@ -37,32 +38,22 @@ export class LibroController {
                 libros = await this._libroService.buscarporParametro(Number(banderabuscar), stringbuscar);
                 res.render('administrador/libro', { categorias, libros });
 
-            } else { //no estoy buscando nada, quiero todos los libros
+            } else { //no estoy buscando nada en especifico, quiero todos los libros
 
 
                 libros = await this._libroService.buscar();
 
-                if (ideditar != null) {
+                if (ideditar) { //voy a editar
                     this.estaEditando = true;
-                }
+                    this.idLibroEditando=Number(ideditar);
 
-                if (!this.estaEditando) { //no esta editando
+                    const respuestaBusquedaLibroEditar = await this._libroService.buscarporId(Number(ideditar));
+                    const libroEditar = respuestaBusquedaLibroEditar[0];
 
+                    res.render('administrador/libro', { categorias, libros, libroEditar });
+
+                } else { //no voy a editar
                     res.render('administrador/libro', { categorias, libros });
-
-                } else if (this.estaEditando) { //si se esta editanto
-
-
-                    if (ideditar != null) {
-                        const respuestaBusquedaLibroEditar = await this._libroService.buscarporId(Number(ideditar));
-                        const libroEditar = respuestaBusquedaLibroEditar[0];
-
-                        res.render('administrador/libro', { categorias, libros, libroEditar });
-
-                    } else {
-                        this.estaEditando = false;
-                    }
-
                 }
             }
 
@@ -83,7 +74,9 @@ export class LibroController {
         //AQUI FALTARIA EL DTO
 
 
-        if (!this.estaEditando) {
+        if (!this.estaEditando) { //SI NO SE ESTA EDITANDO, INSERTA
+
+            this.estaEditando=false;
             //registro el libro
             const respuestaLibroRegistrado = await this._libroService.registrar(libro);
 
@@ -100,8 +93,12 @@ export class LibroController {
             res.redirect('/libro/principal');
 
         } else { //ESTOY EDITANDO
-            const respuestaLibroEditado = await this._libroService.editarLibro(libro.id, libro);
+
+            
+            const respuestaLibroEditado = await this._libroService.editarLibro(this.idLibroEditando, libro);
+
             this.estaEditando = false;
+
             res.redirect('/libro/principal');
         }
 

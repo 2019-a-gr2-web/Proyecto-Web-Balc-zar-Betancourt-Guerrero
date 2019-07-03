@@ -13,23 +13,6 @@ export class LibroService {
 
     }
 
-
-    //NOTA: por ahora de manera asincrona,solo para pruebas de insercion de libros
-    registrarCategoria(nuevaLibro: Libro) {
-
-        const objetoEntidad = this._librosRepositorio.create(nuevaLibro);
-
-        this._librosRepositorio.save(objetoEntidad).then(
-            (datos) => {
-                console.log('dato creado', datos);
-            }
-        ).catch(
-            (error) => {
-                //console.error('Error:', error);
-            }
-        )
-    }
-
     buscar(parametroBusqueda?): Promise<Libro[]> {
         return this._librosRepositorio.find(parametroBusqueda);
     }
@@ -45,6 +28,7 @@ export class LibroService {
 
         return this._librosRepositorio.find({ id: idbuscar })
     }
+
 
     buscarporParametro(bandera: number, stringbusscar: string) {
         if (bandera == 0) { //por autor
@@ -103,7 +87,8 @@ export class LibroService {
                 autor: libroEditado.autor,
                 edicion: libroEditado.edicion,
                 editorial: libroEditado.editorial,
-                precio: libroEditado.precio
+                precio: libroEditado.precio,
+                estado: libroEditado.estado
             });
     }
 

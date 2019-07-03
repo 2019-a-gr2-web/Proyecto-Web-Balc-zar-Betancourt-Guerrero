@@ -64,6 +64,10 @@
         .btn {
             color: white;
         }
+
+        #btn_close_modal {
+            color: black;
+        }
     </style>
 </head>
 
@@ -103,7 +107,8 @@
 
                         <form action="/libro/principal">
                             <div class="col-sm-1">
-                                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <button class="btn" type="submit"><i class="fa fa-search"
+                                        aria-hidden="true"></i></button>
                             </div>
                             <div class="dropdown col-sm-6">
                                 <input style="margin-right: 10px" class="form-control" id="stringbuscar" type="text"
@@ -161,7 +166,7 @@
                                 <td>
                                     <form action="/libro/principal" method="GET">
                                         <input type="hidden" id="ideditar" name="ideditar" value="<%= libro.id %>">
-                                        <button>Editar</button>
+                                        <button class="btn fa fa-pencil"> Editar</button>
                                     </form>
                                 </td>
 
@@ -169,18 +174,22 @@
                                     <form action="/libro/estado" method="POST">
                                         <input type="hidden" name="id" value="<%= libro.id %>">
                                         <input type="hidden" name="estado" value="<%= libro.estado %>">
-                                        <button>Desactivar</button>
+                                        <% if(libro.estado=="Disponible"){ %>
+                                        <button class="btn fa fa-minus-circle"> Desactivar</button>
+                                        <% }else{ %>
+                                        <button class="btn fa fa-plus-circle"> Activar</button>
+                                        <%}%>
                                     </form>
                                 </td>
 
                             </tr>
                             <% }); %>
-                            <%}%>
+                                        <%}%>
 
 
                             <!-- PARA EDITAR, si existe un Libro a editar, se genera esto de aqui abajo -->
                             <% const existeLibroEditar=typeof libroEditar !== "undefined"; %>
-                            <% if(existeLibroEditar){ %>
+                                        <% if(existeLibroEditar){ %>
                             <tr>
                                 <form action="/libro/registrar" method="POST">
 
@@ -210,7 +219,7 @@
                                     <td><input id="inputsEditar" type="disabled" name="estado"
                                             value="<%= libroEditar.estado %>" disabled>
                                     </td>
-                                    <td colspan="2"><button>Editar!</button></td>
+                                    <td colspan="2"><button class="btn">Editar!</button></td>
                                 </form>
                             </tr>
                             <% } %>
@@ -275,9 +284,10 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success glyphicon glyphicon-check">
+                        <button class="btn glyphicon glyphicon-check">
                             GUARDAR</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="btn_close_modal" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </form>
 
