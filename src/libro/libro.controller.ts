@@ -80,15 +80,8 @@ export class LibroController {
             //registro el libro
             const respuestaLibroRegistrado = await this._libroService.registrar(libro);
 
-
-            //creo la de rompimiento, aqui faltaria un forEach cuando sean multiples categorias (creo)
-            const entidadHistorialCategoria: HistorialCategoriaLibro = {
-                fkLibro: respuestaLibroRegistrado.id,
-                fkCategoria: libro.categoria
-            }
-
             //registro la de rompimiento
-            this._historialCategoriaLibroService.registrarHistorialCategoria(entidadHistorialCategoria);
+            this._historialCategoriaLibroService.registrarHistorialCategoria(respuestaLibroRegistrado.id,libro.categoria);
 
             res.redirect('/libro/principal');
 

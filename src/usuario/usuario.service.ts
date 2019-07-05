@@ -28,23 +28,17 @@ export class UsuarioService {
     }
 
 
-    buscarUsuario(user: string, password: string): Promise<any[]> {
+    buscarUsuario(user: string, password: string) {
 
-        return this._usuariosRepositorio.find({ usuario: user, contrasenia: password});
+        //return this._usuariosRepositorio.find({ usuario: user, contrasenia: password});
+        return this._usuariosRepositorio.query("SELECT * FROM usuario, tipousuario WHERE usuario.fktipousuarioid=tipousuario.id AND "+
+            "usuario.usuario="+"'"+user+"'"+" AND usuario.contrasenia="+"'"+password+"';");
 
     }
 
-    registrarAdmin(usuarioAdmin: Usuario) {
-        const objetoEntidad = this._usuariosRepositorio.create(usuarioAdmin);
-        this._usuariosRepositorio.save(objetoEntidad).then(
-            (dato) => {
-                console.log("admin creado: ", dato);
-            }
-        ).catch(
-            (error) => {
-
-            }
-        );
+    registrarUsuario(usuario: Usuario) {
+        const objetoEntidad = this._usuariosRepositorio.create(usuario);
+        this._usuariosRepositorio.save(objetoEntidad);
     }
 
 

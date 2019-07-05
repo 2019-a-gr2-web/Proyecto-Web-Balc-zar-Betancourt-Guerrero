@@ -65,18 +65,16 @@ export class LibroEntity {
   @OneToMany(type => HistorialCategoriaLibroEntity,
     historialCategoriaLibros => historialCategoriaLibros,
     {
-      cascade: true,
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
+      //onDelete: "CASCADE",
+      //onUpdate: "CASCADE",
     })
   historialCategoriaLibros: HistorialCategoriaLibroEntity[]
 
   @OneToMany(type => DetalleEntity,
     detalles => detalles,
     {
-      cascade: true,
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
+      //onDelete: "CASCADE",
+      //onUpdate: "CASCADE",
     })
   detalles: DetalleEntity[];
 

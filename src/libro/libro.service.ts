@@ -1,8 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { LibroEntity } from "./libro.entity";
-import { Repository, DeleteResult } from "typeorm";
+import { Repository, DeleteResult, getRepository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Libro } from "./Interface/libro";
+import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/historialCategoriaLibro.entity";
+import { CategoriaEntity } from "../categoria/categoria.entity";
 
 @Injectable()
 export class LibroService {
@@ -10,17 +12,13 @@ export class LibroService {
     constructor(@InjectRepository(LibroEntity)
     private readonly _librosRepositorio: Repository<LibroEntity>) {
 
-
+        //this.obtenerCategoriasPorLibro(3);
     }
 
     buscar(parametroBusqueda?): Promise<Libro[]> {
         return this._librosRepositorio.find(parametroBusqueda);
-    }
 
-
-    //buscar JOIN con la de rompimiento y la categoria
-    buscarJoin() {
-
+        
     }
 
 
@@ -55,11 +53,6 @@ export class LibroService {
         return this._librosRepositorio.save(objetoEntidad);
     }
 
-    /*editardelaBD(idtragoOriginal: number, tragoEditado: Trago) {
-        return this._tragosRepositorio.update(idtragoOriginal,
-            { nombre: tragoEditado.nombre, tipo: tragoEditado.tipo, gradoAlcohol: tragoEditado.gradoAlcohol, precio: tragoEditado.precio, fechaCaducidad: tragoEditado.fechaCaducidad });
-    }*/
-
     eliminarDeLaBD(id: number): Promise<DeleteResult> {
         return this._librosRepositorio.delete(id);
     }
@@ -91,6 +84,50 @@ export class LibroService {
                 estado: libroEditado.estado
             });
     }
+
+
+    obtenerCategoriasPorLibro(idLibro: number) {
+        /*const libro= getRepository(LibroEntity)
+            .createQueryBuilder("libro")
+            .innerJoinAndSelect(HistorialCategoriaLibroEntity, "historial", 'historial.librofkid = libro.id')
+            .innerJoinAndSelect(CategoriaEntity, "categoria", 'categoria.id = historial.categoriafkid')
+            .where('historial.librofkid = :id', { id: idLibro })
+            .getOne().then(
+                data => {
+                     console.log(data)
+                }
+            ).catch(
+
+            );*/
+
+            const detalles= getRepository(LibroEntity)
+            .createQueryBuilder("libro")
+            .leftJoinAndSelect(HistorialCategoriaLibroEntity, "historial", 'historial.librofkid = libro.id')
+            //.innerJoinAndSelect(CategoriaEntity, "categoria", 'categoria.id = historial.categoriafkid')
+            .where('historial.librofkid = :id', { id: idLibro })
+            .getOne().then(
+                data => {
+                     console.log(data)
+                }
+            ).catch(
+
+            );
+
+        
+           
+
+ 
+        /* return this._librosRepositorio
+             .query('SELECT * FROM libro,historialcategorialibro,categoria WHERE libro.id=' + idLibro + ' AND historialcategorialibro.librofkid=' + idLibro + ' AND categoria.id=historialcategorialibro.categoriafkid').then
+             (
+                 data => {
+                     console.log(data);
+                 }
+             ).catch(
+ 
+             );*/
+    }
+
 
 
 }

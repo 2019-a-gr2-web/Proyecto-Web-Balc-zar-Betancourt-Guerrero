@@ -14,9 +14,13 @@ export class HistorialCategoriaLibroService {
     }
 
 
-    registrarHistorialCategoria(objetoHistorialCategoria:HistorialCategoriaLibroEntity){
+    registrarHistorialCategoria(idLibro:number,idCategoria:number){
 
-        const objetoEntidad=this._historialcategoriaRepositorio.create(objetoHistorialCategoria);
+        const objetoHistorialCategoriaLibro = new HistorialCategoriaLibroEntity();
+        objetoHistorialCategoriaLibro.librofkid= idLibro;
+        objetoHistorialCategoriaLibro.categoriafkid = idCategoria;
+
+        const objetoEntidad=this._historialcategoriaRepositorio.create(objetoHistorialCategoriaLibro);
 
         this._historialcategoriaRepositorio.save(objetoEntidad);
         
