@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, ManyToOne, PrimaryGeneratedColumn, Column, JoinColumn } from 'typeorm'
 import { CategoriaEntity } from '../categoria/categoria.entity';
 import { LibroEntity } from '../libro/libro.entity';
 
@@ -8,10 +8,16 @@ export class HistorialCategoriaLibroEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @ManyToOne( type => LibroEntity, libro=>libro.historialCategoriaLibros)
-  fkLibro?: number;
+  @Column()
+  librofkid:number;
+  @ManyToOne(()=> LibroEntity,libro=>libro.historialCategoriaLibros)
+  @JoinColumn({ name: 'librofkid' })
+  fkLibro?: LibroEntity;
 
-  @ManyToOne( type => CategoriaEntity, categoria=>categoria.historialCategoriaLibros)
-  fkCategoria: number;
+  @Column()
+  categoriafkid:number;
+  @ManyToOne(()=> CategoriaEntity, categoria=>categoria.historialCategoriaLibros)
+  @JoinColumn({ name: 'categoriafkid' })
+  fkCategoria: CategoriaEntity;
 
 }
