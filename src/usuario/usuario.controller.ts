@@ -51,12 +51,12 @@ export class UsuarioController {
                 res.redirect('/libro/principal');
 
             }else{ //se iria a la vista del cliente
-
+                
             }
 
         } else {
             res.status(400);
-            res.send({ mensaje: 'Error login', error: 400 });
+            res.send({ mensaje: 'Error login, datos incorrectos', error: 400 });
         }
     }
 }

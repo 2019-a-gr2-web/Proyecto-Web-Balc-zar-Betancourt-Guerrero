@@ -5,7 +5,13 @@ export interface Libro {
   autor: string;
   edicion: number;
   editorial: string;
-  categoria?: number;
   precio: number;
   estado: string;
+
+
+  categoria1?:string;
+  categoria2?:string;
+  categoria3?:string;
+  categoria4?:string;
+  categoria5?:string;
 }
