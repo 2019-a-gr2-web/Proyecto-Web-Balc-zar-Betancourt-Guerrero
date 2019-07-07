@@ -12,10 +12,9 @@ export class LibroService {
     constructor(@InjectRepository(LibroEntity)
     private readonly _librosRepositorio: Repository<LibroEntity>) {
 
-        //this.obtenerCategoriasPorLibro(3);
     }
 
-    buscar(parametroBusqueda?): Promise<Libro[]> {
+    buscar(parametroBusqueda?): Promise<LibroEntity[]> {
         return this._librosRepositorio.find(parametroBusqueda);
 
         
@@ -76,7 +75,7 @@ export class LibroService {
         return this._librosRepositorio.update(idLibroOriginal,
             {
                 isbn: libroEditado.isbn,
-                titulo: libroEditado.isbn,
+                titulo: libroEditado.titulo,
                 autor: libroEditado.autor,
                 edicion: libroEditado.edicion,
                 editorial: libroEditado.editorial,
@@ -86,46 +85,11 @@ export class LibroService {
     }
 
 
-    obtenerCategoriasPorLibro(idLibro: number) {
-        /*const libro= getRepository(LibroEntity)
-            .createQueryBuilder("libro")
-            .innerJoinAndSelect(HistorialCategoriaLibroEntity, "historial", 'historial.librofkid = libro.id')
-            .innerJoinAndSelect(CategoriaEntity, "categoria", 'categoria.id = historial.categoriafkid')
-            .where('historial.librofkid = :id', { id: idLibro })
-            .getOne().then(
-                data => {
-                     console.log(data)
-                }
-            ).catch(
-
-            );*/
-
-            const detalles= getRepository(LibroEntity)
-            .createQueryBuilder("libro")
-            .leftJoinAndSelect(HistorialCategoriaLibroEntity, "historial", 'historial.librofkid = libro.id')
-            //.innerJoinAndSelect(CategoriaEntity, "categoria", 'categoria.id = historial.categoriafkid')
-            .where('historial.librofkid = :id', { id: idLibro })
-            .getOne().then(
-                data => {
-                     console.log(data)
-                }
-            ).catch(
-
-            );
-
+    obtenerCategoriasPorLibro() {
         
-           
-
- 
-        /* return this._librosRepositorio
-             .query('SELECT * FROM libro,historialcategorialibro,categoria WHERE libro.id=' + idLibro + ' AND historialcategorialibro.librofkid=' + idLibro + ' AND categoria.id=historialcategorialibro.categoriafkid').then
-             (
-                 data => {
-                     console.log(data);
-                 }
-             ).catch(
- 
-             );*/
+        return this._librosRepositorio
+        .query('SELECT libro.id,categoria.nombre,categoria.id as catid FROM libro,historialcategorialibro,categoria WHERE libro.id=historialcategorialibro.librofkid AND categoria.id=historialcategorialibro.categoriafkid');
+        
     }
 
 

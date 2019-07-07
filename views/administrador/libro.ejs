@@ -27,7 +27,7 @@
         }
 
         #inputsEditar {
-            max-width: 98%;
+            max-width: 100%;
         }
 
 
@@ -67,6 +67,47 @@
 
         #btn_close_modal {
             color: black;
+        }
+
+
+
+
+
+
+        /* para los checkboxes en el select */
+
+        .multiselect {
+            width: 200px;
+        }
+
+        .selectBox {
+            position: relative;
+        }
+
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .overSelect {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #checkboxes {
+            display: none;
+            border: 1px #dadada solid;
+        }
+
+        #checkboxes label {
+            display: block;
+        }
+
+        #checkboxes label:hover {
+            background-color: #1e90ff;
         }
     </style>
 </head>
@@ -159,7 +200,15 @@
                                 <td><%= libro.autor %></td>
                                 <td><%= libro.edicion %></td>
                                 <td><%= libro.editorial %></td>
-                                <td><%= libro.categorias %></td>
+                                <!-- Muestro las categorias por libro -->
+                                <td>
+                                    <% categoriasPorLibro.forEach((cat)=>{ %>
+                                    <% if(cat.id==libro.id){ %>
+                                    <%= cat.nombre %>
+                                    <% } %>
+                                    <% }); %>
+                                </td>
+                                <!-- -------------------------------- -->
                                 <td><%= libro.precio %></td>
                                 <td><%= libro.estado %></td>
 
@@ -204,14 +253,25 @@
                                     <td><input id="inputsEditar" type="text" name="editorial"
                                             value="<%= libroEditar.editorial %>"></td>
                                     <td>
-                                        <select id="inputsEditar" name="categoria" id="">
-                                            <% const existeCategoria=typeof categorias !== "undefined"; %>
-                                            <% if(existeCategoria){ %>
-                                            <% categorias.forEach((value)=>{ %>
-                                            <option value="<%=value.id%>"><%= value.nombre %></option>
-                                            <% }) %>
-                                            <% } %>
-                                        </select>
+                                        <div id="inputsEditar" class="multiselect">
+                                            <div class="selectBox" onclick="showCheckboxes()">
+                                                <select>
+                                                    <option>Escoja categorías</option>
+                                                </select>
+                                                <div class="overSelect"></div>
+                                            </div>
+                                            <div id="checkboxes">
+                                                <% const existeCategoria=typeof categorias !== "undefined"; %>
+                                                <% if(existeCategoria){ %>
+                                                <% categorias.forEach((value)=>{ %>
+                                                <label for="categoria<%=value.id%>">
+                                                    <input type="checkbox" id="categoria<%=value.id%>"
+                                                        name="categoria<%=value.id%>" /><%= value.nombre %></label>
+                                                <% }) %>
+                                                <% } %>
+
+                                            </div>
+                                        </div>
                                     </td>
                                     <td><input id="inputsEditar" type="number" step="any" name="precio"
                                             value="<%= libroEditar.precio %>">
@@ -270,14 +330,25 @@
                         <input type="text" id="ideditorial" placeholder="Editorial..." name="editorial" value="">
                         <br>
                         <label for="idcategoria">Categoría:</label>
-                        <select name="categoria" id="idcategoria">
-                            <% const existeCategoria=typeof categorias !== "undefined"; %>
-                            <% if(existeCategoria){ %>
-                            <% categorias.forEach((value)=>{ %>
-                            <option value="<%=value.id%>"><%= value.nombre %></option>
-                            <% }) %>
-                            <% } %>
-                        </select>
+                        <div class="multiselect">
+                            <div class="selectBox" onclick="showCheckboxes()">
+                                <select>
+                                    <option>Escoja categorías</option>
+                                </select>
+                                <div class="overSelect"></div>
+                            </div>
+                            <div id="checkboxes">
+                                <% const existeCategoria=typeof categorias !== "undefined"; %>
+                                <% if(existeCategoria){ %>
+                                <% categorias.forEach((value)=>{ %>
+                                <label for="categoria<%=value.id%>">
+                                    <input type="checkbox" id="categoria<%=value.id%>"
+                                        name="categoria<%=value.id%>" /><%= value.nombre %></label>
+                                <% }) %>
+                                <% } %>
+
+                            </div>
+                        </div>
                         <br>
                         <label for="idprecio">Precio:</label>
                         <input type="number" step="any" id="idprecio" placeholder="Precio..." name="precio" value="">
@@ -300,32 +371,20 @@
 
 
 
+    <!-- para el select con checkboxes.. no borrar este script -->
+    <script>
+        var expanded = false;
 
-    <!-- <script>
-        function myFunction() {
-            // Declare variables 
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("idBusqueda");
-            parametro = document.getElementById("parambuscar").value;
-            filter = input.value.toUpperCase();
-            table = document.getElementById("tablainstrumentos");
-            tr = table.getElementsByTagName("tr");
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[Number(parametro)];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
+        function showCheckboxes() {
+            var checkboxes = document.getElementById("checkboxes");
+            if (!expanded) {
+                checkboxes.style.display = "block";
+                expanded = true;
+            } else {
+                checkboxes.style.display = "none";
+                expanded = false;
             }
-        }
-    </script> -->
-
+        }</script>
 
 </body>
 
