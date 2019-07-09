@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <!--revisar esto libreria de iconos fafa-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #contenidocentral {
+            margin-top: 70px;
+        }
+
+        .navbar {
+            background-color: #046E8F;
+
+        }
+
+        .nav-item,
+        .navbar-brand {
+            color: white;
+        }
+
+
+
+        #triangulo {
+            width: 0;
+            height: 0;
+            border-top: 25px solid white;
+            border-right: 50px solid blue;
+
+            border-bottom: 25px solid white;
+
+        }
+
+
+        .triangle-left {
+            width: 0;
+            height: 0;
+            border-top: 25px solid transparent;
+            border-right: 50px solid #555;
+            border-bottom: 25px solid transparent;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .triangle-right {
+            width: 0;
+            height: 0;
+            border-top: 25px solid transparent;
+            border-left: 50px solid #555;
+            border-bottom: 25px solid transparent;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        #unidadcatalogo {
+            margin-top: 25px;
+        }
+
+        #cantidadlibros {
+            max-width: 20%;
+
+        }
+
+        .count {
+            background-color: white;
+            font-size: 20px;
+        }
+
+        #buttoncarrito {
+            margin-top: 20px;
+            margin-left: -95px;
+        }
+
+
+        .btn-xlarge {
+            padding: 18px 28px;
+            font-size: 22px;
+            line-height: normal;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+
+        .fa-cart-plus {
+            padding: 18px 28px;
+            font-size: 30px;
+            line-height: normal;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+
+        .card {
+            background-color: #E8F1F4;
+        }
+
+
+        #btnlupa {
+            background-color: #046E8F;
+            color: white;
+        }
+
+        #spinnercantidad{
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- -------------------------NAV BAR-------------- -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">Librería</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <!-- <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a> -->
+                <a class="nav-item nav-link fa fa-book" href="#"> Libros</a>
+                <a class="nav-item nav-link fa fa-shopping-cart" href="#"> Carrito</a>
+
+            </div>
+        </div>
+    </nav>
+    <!-- ---------------------------------------------- -->
+
+
+    <div class="row" id="contenidocentral">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+
+            <!------------------- BARRA DE BUSQUEDA------------------ -->
+            <form action="">
+                <div class="row">
+                    <div class="col-sm-1">
+                        <button id="btnlupa" class="btn" type="submit"><i class="fa fa-search"
+                                aria-hidden="true"></i></button>
+                    </div>
+                    <div class="dropdown col-sm-6">
+                        <input style="margin-right: 10px" class="form-control" id="stringbuscar" type="text"
+                            placeholder="Buscar.." name="stringbuscar">
+                    </div>
+                    <div class="col-sm-5">
+                        <select class="form-control" id="banderabuscar" name="banderabuscar">
+                            <option>Seleccione una opción</option>
+                            <option value="0">Autor</option>
+                            <option value="1">Título</option>
+                            <option value="2">Categoría</option>
+
+                        </select>
+
+                    </div>
+                </div>
+            </form>
+
+            <!-- --------------------------------------------------------------------------- -->
+
+            <% const existenLibros=typeof libros !== "undefined"; %>
+            <% if(existenLibros){ %>
+            <% libros.forEach((libro)=>{ %>
+
+            <div class="card" id="unidadcatalogo">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <p>
+                                <strong>ISBN:</strong> <%= libro.isbn %><br>
+                                <strong>TÍTULO:</strong> <%= libro.titulo %><br>
+                                <strong>AUTOR:</strong> <%= libro.autor %><br>
+                                <strong>CATEGORÍAS:</strong>
+                                <% categoriasPorLibro.forEach((cat)=>{ %>
+                                <% if(cat.id==libro.id){ %>
+                                <%= cat.nombre %>
+                                <% } %>
+                                <% }); %> <br>
+                                <strong>EDICIÓN:</strong> <%= libro.edicion %><br>
+                                <strong>EDITORIAL:</strong> <%= libro.editorial %><br>
+                                <strong>PRECIO:</strong> <%= libro.precio %>
+                            </p>
+
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <form action="">
+                                <div id="spinnercantidad" class="row text-center">
+                                    <div class="triangle-left minus"></div>
+                                    <input id="cantidadlibros" type="number" class="count text-center" name="qty"
+                                        value="1">
+                                    <div class="triangle-right plus"></div>
+                                </div>
+                                <div id="buttoncarrito">
+                                    <button type="submit" class="btn btn-info btn-xlarge fa fa-cart-plus"></button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- <div class="card-footer text-muted">
+                          2 days ago
+                        </div> -->
+            </div>
+            <% }); %>
+            <% } %>
+
+
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.count').prop('disabled', true);
+            $(document).on('click', '.plus', function () {
+                $('.count').val(parseInt($('.count').val()) + 1);
+            });
+            $(document).on('click', '.minus', function () {
+                $('.count').val(parseInt($('.count').val()) - 1);
+                if ($('.count').val() == 0) {
+                    $('.count').val(1);
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
