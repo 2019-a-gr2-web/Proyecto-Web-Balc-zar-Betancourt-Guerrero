@@ -52,6 +52,7 @@ export class UsuarioController {
 
             }else{ //se iria a la vista del cliente
                 
+                res.redirect('/libro/catalogo');
             }
 
         } else {
