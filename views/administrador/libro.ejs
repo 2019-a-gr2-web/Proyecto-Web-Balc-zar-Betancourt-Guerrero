@@ -266,7 +266,7 @@
                                                 <% categorias.forEach((value)=>{ %>
                                                 <label for="categoria<%=value.id%>">
                                                     <input type="checkbox" id="categoria<%=value.id%>"
-                                                        name="categoria<%=value.id%>" /><%= value.nombre %></label>
+                                                        name="categoria<%=value.id%>" value="<%= value.id%>" /><%= value.nombre %></label>
                                                 <% }) %>
                                                 <% } %>
 

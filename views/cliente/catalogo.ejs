@@ -68,14 +68,11 @@
             margin-top: 25px;
         }
 
-        #cantidadlibros {
-            max-width: 20%;
-
-        }
 
         .count {
             background-color: white;
             font-size: 20px;
+            max-width: 20%;
         }
 
         #buttoncarrito {
@@ -112,7 +109,7 @@
             color: white;
         }
 
-        #spinnercantidad{
+        #spinnercantidad {
             margin-top: 20px;
         }
     </style>
@@ -172,7 +169,7 @@
             <% const existenLibros=typeof libros !== "undefined"; %>
             <% if(existenLibros){ %>
             <% libros.forEach((libro)=>{ %>
-
+            <% if(libro.estado=="Disponible"){ %>
             <div class="card" id="unidadcatalogo">
 
                 <div class="card-body">
@@ -197,10 +194,12 @@
                         <div class="col-lg-4 text-center">
                             <form action="">
                                 <div id="spinnercantidad" class="row text-center">
-                                    <div class="triangle-left minus"></div>
-                                    <input id="cantidadlibros" type="number" class="count text-center" name="qty"
+                                    <div onclick="cambiarCantidad('<%=libro.id%>','-')" class="triangle-left minus">
+                                    </div>
+                                    <input id="inputcl<%=libro.id%>" type="number" class="count text-center" name="qty"
                                         value="1">
-                                    <div class="triangle-right plus"></div>
+                                    <div onclick="cambiarCantidad('<%=libro.id%>','+')" class="triangle-right plus">
+                                    </div>
                                 </div>
                                 <div id="buttoncarrito">
                                     <button type="submit" class="btn btn-info btn-xlarge fa fa-cart-plus"></button>
@@ -215,6 +214,7 @@
                           2 days ago
                         </div> -->
             </div>
+            <% }%>
             <% }); %>
             <% } %>
 
@@ -227,18 +227,18 @@
 
 
     <script>
-        $(document).ready(function () {
-            $('.count').prop('disabled', true);
-            $(document).on('click', '.plus', function () {
-                $('.count').val(parseInt($('.count').val()) + 1);
-            });
-            $(document).on('click', '.minus', function () {
-                $('.count').val(parseInt($('.count').val()) - 1);
-                if ($('.count').val() == 0) {
-                    $('.count').val(1);
-                }
-            });
-        });
+        $('.count').prop('disabled', true);
+       
+        function cambiarCantidad(idLibro, operacion) {
+            inputCantidad = document.getElementById('inputcl' + idLibro)
+            if (operacion == '+') {
+                inputCantidad.value = Number(inputCantidad.value) + 1;
+            } else {
+                inputCantidad.value = Number(inputCantidad.value) - 1;
+            }
+
+
+        }
     </script>
 
 
