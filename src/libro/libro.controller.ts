@@ -31,13 +31,13 @@ export class LibroController {
         @Query('banderabuscar') banderabuscar?: number) {
 
         if (session.username) { //si es que existe la sesion significa que estamos logeados
-            const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
+            let categoriasPorLibro;
             const categorias = await this._categoriaService.buscar(); //las categorias existentes que se van a mandar para escoger en el registro de libros
-
+            this.estaEditando = false;
             let libros;
 
             if (stringbuscar) { //si se esta buscando
-
+                categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                 libros = await this._libroService.buscarporParametro(Number(banderabuscar), stringbuscar);
                 res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
 
@@ -48,6 +48,7 @@ export class LibroController {
 
 
                 if (ideditar) { //voy a editar
+                    categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                     this.estaEditando = true;
                     this.idLibroEditando = Number(ideditar);
 
@@ -57,6 +58,7 @@ export class LibroController {
                     res.render('administrador/libro', { categorias, libros, libroEditar, categoriasPorLibro });
 
                 } else { //no voy a editar
+                    categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                     res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
                 }
             }
@@ -80,7 +82,7 @@ export class LibroController {
         if (libro.categoria1 == "on") {
             categoriasArray.push(1);
         }
-        if (libro.categoria2 = "on") {
+        if (libro.categoria2 == "on") {
             categoriasArray.push(2);
         }
         if (libro.categoria3 == "on") {
