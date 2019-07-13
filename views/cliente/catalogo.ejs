@@ -127,7 +127,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <!-- <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a> -->
-                <a class="nav-item nav-link fa fa-book" href="#"> Libros</a>
+                <a class="nav-item nav-link fa fa-book" href="/libro/catalogo"> Libros</a>
                 <a class="nav-item nav-link fa fa-shopping-cart" href="#"> Carrito</a>
 
             </div>
@@ -192,16 +192,17 @@
 
                         </div>
                         <div class="col-lg-4 text-center">
-                            <form action="">
+                            <form action="/libro/agregarcarrito" method="POST">
                                 <div id="spinnercantidad" class="row text-center">
                                     <div onclick="cambiarCantidad('<%=libro.id%>','-')" class="triangle-left minus">
                                     </div>
-                                    <input id="inputcl<%=libro.id%>" type="number" class="count text-center" name="qty"
+                                    <input id="inputcl<%=libro.id%>" type="number" class="count text-center" name="cantidad"
                                         value="1">
                                     <div onclick="cambiarCantidad('<%=libro.id%>','+')" class="triangle-right plus">
                                     </div>
                                 </div>
                                 <div id="buttoncarrito">
+                                    <input type="hidden" name="idLibro" value="<%= libro.id %>">
                                     <button type="submit" class="btn btn-info btn-xlarge fa fa-cart-plus"></button>
                                 </div>
                             </form>
@@ -227,18 +228,18 @@
 
 
     <script>
-        $('.count').prop('disabled', true);
+        //$('.count').prop('disabled', true);
        
         function cambiarCantidad(idLibro, operacion) {
             inputCantidad = document.getElementById('inputcl' + idLibro)
+            //inputCantidad.disabled=true;
             if (operacion == '+') {
                 inputCantidad.value = Number(inputCantidad.value) + 1;
             } else {
                 inputCantidad.value = Number(inputCantidad.value) - 1;
             }
-
-
         }
+
     </script>
 
 

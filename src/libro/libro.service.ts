@@ -16,8 +16,6 @@ export class LibroService {
 
     buscar(parametroBusqueda?): Promise<LibroEntity[]> {
         return this._librosRepositorio.find(parametroBusqueda);
-
-        
     }
 
 
@@ -85,7 +83,7 @@ export class LibroService {
     }
 
 
-    obtenerCategoriasPorLibro() {
+    obtenerCategoriasPorLibro():Promise<any> {
         
         return this._librosRepositorio
         .query('SELECT libro.id,categoria.nombre,categoria.id as catid FROM libro,historialcategorialibro,categoria WHERE libro.id=historialcategorialibro.librofkid AND categoria.id=historialcategorialibro.categoriafkid');
