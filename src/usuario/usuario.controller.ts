@@ -13,6 +13,7 @@ export class UsuarioController {
     @Get('login')
     loginvista(@Res() res, @Session() session) {
         if (session) {
+            session.username = undefined;
             session.destroy();
         }
         res.render('login', {});
@@ -24,23 +25,27 @@ export class UsuarioController {
     }
 
     @Post('registrar')
-    registrarUser(@Res() res, @Body() user: Usuario) {
+    async registrarUser(@Res() res, @Body() user: Usuario) {
 
         user.cedula = Number(user.cedula);
         user.fkTipoUsuario = Number(user.fkTipoUsuario);
         //aqui faltaria el dto
+        try {
 
-        this._usuarioService.registrarUsuario(user);
+            const respuestaUsuarioRegistrado = await this._usuarioService.registrarUsuario(user);
+            res.redirect('/usuario/login');
 
-        res.redirect('/usuario/login');
-
+        } catch (e) {
+            res.status(500);
+            res.send({ mensaje: 'Error', codigo: 500 });
+        }
 
     }
 
 
     @Post('login')
     async login(@Res() res, @Body() usuario, @Session() session) {
-        
+
         try {
             const respuestaAutenticacion = await this._usuarioService.buscarUsuario(usuario.username, usuario.password);
 
@@ -72,7 +77,7 @@ export class UsuarioController {
 
     }
 
-    /*@Get('logout')
+    @Get('logout')
     logout(
         @Res() res,
         @Session() session,
@@ -80,5 +85,5 @@ export class UsuarioController {
         session.username = undefined;
         session.destroy();
         res.redirect('/usuario/login');
-    }*/
+    }
 }

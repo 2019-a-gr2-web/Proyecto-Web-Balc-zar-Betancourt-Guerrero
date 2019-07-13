@@ -28,7 +28,7 @@ export class UsuarioService {
     }
 
 
-    buscarUsuario(user: string, password: string) {
+    buscarUsuario(user: string, password: string):Promise<any> {
 
         //return this._usuariosRepositorio.find({ usuario: user, contrasenia: password});
         return this._usuariosRepositorio.query("SELECT * FROM usuario, tipousuario WHERE usuario.fktipousuarioid=tipousuario.id AND "+
@@ -36,9 +36,9 @@ export class UsuarioService {
 
     }
 
-    registrarUsuario(usuario: Usuario) {
+    registrarUsuario(usuario: Usuario):Promise<UsuarioEntity> {
         const objetoEntidad = this._usuariosRepositorio.create(usuario);
-        this._usuariosRepositorio.save(objetoEntidad);
+        return this._usuariosRepositorio.save(objetoEntidad);
     }
 
 
