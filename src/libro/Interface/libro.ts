@@ -14,4 +14,7 @@ export interface Libro {
   categoria3?:string;
   categoria4?:string;
   categoria5?:string;
+
+  //Para el carrito
+  cantidad?:number;
 }
