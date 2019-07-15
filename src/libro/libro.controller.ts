@@ -164,7 +164,7 @@ export class LibroController {
     ) {
         try {
 
-            await this._libroService.cambiarEstado(Number(id), estado);
+            const respuestaCambioEstado = await Promise.all([this._libroService.cambiarEstado(Number(id), estado)]);
             res.redirect('/libro/principal');
 
         } catch (e) {
@@ -252,6 +252,38 @@ export class LibroController {
             res.send({ mensaje: 'Error', codigo: 500 });
         }
 
+    }
+
+
+    // Carrito Cliente
+
+    @Get('carrito')
+    async carritoDeCompra(@Res() res, @Session() session) {
+        try {
+            if (session.username) {
+
+                const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
+                const carrito:Libro[]=session.carrito as Libro[];
+                const total = carrito.reduce(
+                    (acumulado, libroActual) => {
+                        return acumulado + (libroActual.precio*libroActual.cantidad);
+                    }, 0
+                );
+                 
+                res.render('cliente/carritocompras', { carrito: session.carrito, categoriasPorLibro,total });
+            
+            } else {
+
+                res.redirect('/usuario/login');
+
+            }
+        } catch (e) {
+            res.status(500);
+            res.send({ mensaje: 'Error', codigo: 500 });
+        }
+
+
+        
     }
 
 }
