@@ -2,6 +2,8 @@ import { Controller, Get, Res, Post, Body, Session } from "@nestjs/common";
 import { UsuarioService } from "./usuario.service";
 import { Usuario } from "./Interface/usuario";
 import { LibroEntity } from "src/libro/libro.entity";
+import { UsuarioCreateDto } from "./dto/usuario.create.dto";
+import { validate } from "class-validator";
 
 @Controller('usuario')
 export class UsuarioController {
@@ -29,15 +31,39 @@ export class UsuarioController {
 
         user.cedula = Number(user.cedula);
         user.fkTipoUsuario = Number(user.fkTipoUsuario);
-        //aqui faltaria el dto
+
+        //class validator
+        //para la validacion con CLASS VALIDATOR
+        let usuarioAValidar = new UsuarioCreateDto();
+        usuarioAValidar.fkTipoUsuario = user.fkTipoUsuario;
+        usuarioAValidar.usuario = user.usuario;
+        usuarioAValidar.contrasenia = user.contrasenia;
+        usuarioAValidar.nombre = user.nombre;
+        usuarioAValidar.apellido = user.apellido;
+        usuarioAValidar.cedula = user.cedula;
+
+
         try {
 
-            const respuestaUsuarioRegistrado = await this._usuarioService.registrarUsuario(user);
-            res.redirect('/usuario/login');
+            const errores = await validate(usuarioAValidar);
+
+
+            if (errores.length > 0) {//Errores en la validacion
+                console.error(errores);
+
+                //res.redirect('/api/dieguito/crearvista?mensaje=hay_un_error');
+                //manejar el error
+            } else {
+
+                const respuestaUsuarioRegistrado = await this._usuarioService.registrarUsuario(user);
+                res.redirect('/usuario/login');
+
+            }
 
         } catch (e) {
             res.status(500);
             res.send({ mensaje: 'Error', codigo: 500 });
+
         }
 
     }

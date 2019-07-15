@@ -8,6 +8,8 @@ import { HistorialCategoriaLibroService } from "../historialCategoriaLibro/histo
 import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/historialCategoriaLibro.entity";
 import { LibroEntity } from "../libro/libro.entity";
 import { get } from "http";
+import { LibroCreateDto } from "./dto/libro.create.dto";
+import { validate } from "class-validator";
 
 
 @Controller('libro')
@@ -106,49 +108,54 @@ export class LibroController {
                 categoriasArray.push(5);
             }
 
-            //AQUI FALTARIA EL DTO
+
+            //para la validacion con CLASS VALIDATOR
+            let libroAValidar = new LibroCreateDto();
+            libroAValidar.isbn = libro.isbn;
+            libroAValidar.titulo = libro.titulo;
+            libroAValidar.autor = libro.autor;
+            libroAValidar.edicion = libro.edicion;
+            libroAValidar.editorial = libro.editorial;
+            libroAValidar.precio = libro.precio;
+            libroAValidar.estado = libro.estado;
+
+            const errores = await validate(libroAValidar);
 
 
-            if (!this.estaEditando) { //SI NO SE ESTA EDITANDO, INSERTA
+            if (errores.length > 0) {//Errores en la validacion
+                console.error(errores);
+               
+                //res.redirect('/api/dieguito/crearvista?mensaje=hay_un_error');
+                //manejar el error
+            } else {
 
-                this.estaEditando = false;
-                //registro el libro
-                const respuestaLibroRegistrado = await this._libroService.registrar(libro);
+                if (!this.estaEditando) { //SI NO SE ESTA EDITANDO, INSERTA
 
-                //registro las de rompimiento (si hay muchas categorias)
-                categoriasArray.forEach(
-                    async categoriaid => {
-                        await this._historialCategoriaLibroService.registrarHistorialCategoria(respuestaLibroRegistrado.id, categoriaid);
-                    }
-                )
+                    this.estaEditando = false;
+                    //registro el libro
+                    const respuestaLibroRegistrado = await this._libroService.registrar(libro);
 
-
-                res.redirect('/libro/principal');
-
-            } else { //ESTOY EDITANDO
-
-
-
-                //quito las categorias anteriores de la de rompimiento
-                //const respuestaEliminar=await this._historialCategoriaLibroService.eliminarCategoriaLibro(this.idLibroEditando);
+                    //registro las de rompimiento (si hay muchas categorias)
+                    categoriasArray.forEach(
+                        async categoriaid => {
+                            await this._historialCategoriaLibroService.registrarHistorialCategoria(respuestaLibroRegistrado.id, categoriaid);
+                        }
+                    )
 
 
-                //se editan las de rompimiento
-                /*categoriasArray.forEach(
-                    async categoriaid=>{
-                   
-                        await this._historialCategoriaLibroService.registrarHistorialCategoria(this.idLibroEditando,categoriaid);
-                    }
-                )*/
+                    res.redirect('/libro/principal');
 
+                } else { //ESTOY EDITANDO
 
-                //se edita el libro
-                const respuestaLibroEditado = await this._libroService.editarLibro(this.idLibroEditando, libro);
+                    //se edita el libro
+                    const respuestaLibroEditado = await this._libroService.editarLibro(this.idLibroEditando, libro);
 
-                this.estaEditando = false;
+                    this.estaEditando = false;
 
-                res.redirect('/libro/principal');
+                    res.redirect('/libro/principal');
+                }
             }
+
         } catch (e) {
             res.status(500);
             res.send({ mensaje: 'Error', codigo: 500 });
@@ -263,15 +270,15 @@ export class LibroController {
             if (session.username) {
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                const carrito:Libro[]=session.carrito as Libro[];
+                const carrito: Libro[] = session.carrito as Libro[];
                 const total = carrito.reduce(
                     (acumulado, libroActual) => {
-                        return acumulado + (libroActual.precio*libroActual.cantidad);
+                        return acumulado + (libroActual.precio * libroActual.cantidad);
                     }, 0
                 );
-                 
-                res.render('cliente/carritocompras', { carrito: session.carrito, categoriasPorLibro,total });
-            
+
+                res.render('cliente/carritocompras', { carrito: session.carrito, categoriasPorLibro, total });
+
             } else {
 
                 res.redirect('/usuario/login');
@@ -283,7 +290,7 @@ export class LibroController {
         }
 
 
-        
+
     }
 
 }
