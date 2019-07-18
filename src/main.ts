@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 //para el middelware de la logica de sesion
-
+const express = require('express');
 import * as session from 'express-session'; // Typescript
 const FileStore = require('session-file-store')(session); // Nodejs
 
