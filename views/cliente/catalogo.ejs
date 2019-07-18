@@ -66,6 +66,7 @@
 
         #unidadcatalogo {
             margin-top: 25px;
+            border: groove #046E8F 10px;
         }
 
 
@@ -78,7 +79,7 @@
         #buttoncarrito {
             margin-top: 20px;
             margin-left: -95px;
-            
+
         }
 
 
@@ -165,8 +166,15 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+    <!-- --------------------------------------------------------------------------- -->
 
-            <!-- --------------------------------------------------------------------------- -->
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+
 
             <% const existenLibros=typeof libros !== "undefined"; %>
             <% if(existenLibros){ %>
@@ -198,8 +206,8 @@
                                 <div id="spinnercantidad" class="row text-center">
                                     <div onclick="cambiarCantidad('<%=libro.id%>','-')" class="triangle-left minus">
                                     </div>
-                                    <input id="inputcl<%=libro.id%>" type="number" class="count text-center" name="cantidad"
-                                        value="1">
+                                    <input id="inputcl<%=libro.id%>" type="number" class="count text-center"
+                                        name="cantidad" value="1">
                                     <div onclick="cambiarCantidad('<%=libro.id%>','+')" class="triangle-right plus">
                                     </div>
                                 </div>
@@ -220,10 +228,10 @@
             <% }%>
             <% }); %>
             <% } %>
-
-
         </div>
-        <div class="col-lg-2"></div>
+
+
+
     </div>
 
 
@@ -231,7 +239,7 @@
 
     <script>
         //$('.count').prop('disabled', true);
-       
+
         function cambiarCantidad(idLibro, operacion) {
             inputCantidad = document.getElementById('inputcl' + idLibro)
             //inputCantidad.disabled=true;

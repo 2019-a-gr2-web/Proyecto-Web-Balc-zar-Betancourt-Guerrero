@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, Session } from "@nestjs/common";
+import { Controller, Get, Res, Post, Body, Session, Req } from "@nestjs/common";
 import { UsuarioService } from "./usuario.service";
 import { Usuario } from "./Interface/usuario";
 import { LibroEntity } from "src/libro/libro.entity";
@@ -13,10 +13,10 @@ export class UsuarioController {
     }
 
     @Get('login')
-    loginvista(@Res() res, @Session() session) {
-        if (session) {
-            session.username = undefined;
-            session.destroy();
+    loginvista(@Res() res, @Req() req) {
+        if (req.session) {
+            req.session.username = undefined;
+            req.session.destroy();
         }
         res.render('login', {});
     }
@@ -70,7 +70,7 @@ export class UsuarioController {
 
 
     @Post('login')
-    async login(@Res() res, @Body() usuario, @Session() session) {
+    async login(@Res() res, @Body() usuario, @Req() req) {
 
         try {
             const respuestaAutenticacion = await this._usuarioService.buscarUsuario(usuario.username, usuario.password);
@@ -78,16 +78,16 @@ export class UsuarioController {
             const userAAutenticar = respuestaAutenticacion[0];
 
             if (userAAutenticar) {
-                session.username = usuario.username;
-                session.password = usuario.password;
+                req.session.username = usuario.username;
+                req.session.password = usuario.password;
 
                 if (userAAutenticar.fkTipoUsuarioId == 1) { //si es admin
 
                     res.redirect('/libro/principal');
 
                 } else { //se iria a la vista del cliente
-                    session.carrito = [];
-                    session.comprando = false;
+                    req.session.carrito = [];
+                    req.session.comprando = false;
                     res.redirect('/libro/catalogo');
                 }
 
@@ -106,10 +106,13 @@ export class UsuarioController {
     @Get('logout')
     logout(
         @Res() res,
-        @Session() session,
+        @Req() req,
     ) {
-        session.username = undefined;
-        session.destroy();
-        res.redirect('/usuario/login');
+        if (req.session) {
+            req.session.username = undefined;
+            req.session.destroy();
+            res.redirect('/usuario/login');
+        }
     }
+
 }

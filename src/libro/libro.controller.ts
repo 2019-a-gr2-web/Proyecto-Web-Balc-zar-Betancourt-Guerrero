@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, Session, Query } from "@nestjs/common";
+import { Controller, Get, Res, Post, Body, Session, Query, Req } from "@nestjs/common";
 import { Libro } from "./Interface/libro";
 import { LibroService } from "./libro.service";
 import { CategoriaService } from "../categoria/categoria.service";
@@ -124,7 +124,7 @@ export class LibroController {
 
             if (errores.length > 0) {//Errores en la validacion
                 console.error(errores);
-               
+
                 //res.redirect('/api/dieguito/crearvista?mensaje=hay_un_error');
                 //manejar el error
             } else {
@@ -199,15 +199,18 @@ export class LibroController {
             if (session.username) { //loggeado
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-
-                if (session.comprando == true) {
+                console.log("COMPRANDO ES: ", session.comprando)
+                if (session.comprando === true) {
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
                 } else {
+                    session.comprando = true;
                     this.librosCatalogo = await this._libroService.buscar();
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
                 }
 
 
+            } else {
+                res.redirect('/usuario/login');
             }
         } catch (e) {
             res.status(500);
@@ -219,40 +222,59 @@ export class LibroController {
     @Post('agregarcarrito')
     agregarCarrito(
         @Res() res,
+        @Req() req,
         @Body('idLibro') idLibro: number,
-        @Body('cantidad') cantidad: number,
-        @Session() session) {
+        @Body('cantidad') cantidad: number
+    ) {
         try {
-            console.log("id del libro: ", idLibro);
 
-            if (session.username) {
-                session.comprando = true;
+
+            if (req.session.username) {
+
                 const index = this.librosCatalogo.findIndex(
                     value => {
-                        return value.id == Number(idLibro);
+                        return value.id === Number(idLibro);
                     }
                 );
 
+                let libroAux: Libro=null;
                 this.librosCatalogo.forEach(
                     libro => {
                         if (libro.id == Number(idLibro)) {
-                            const libroAux: Libro = libro
+                            libroAux = libro
                             libroAux.cantidad = Number(cantidad);
-                            session.carrito.push(libroAux);
                         }
                     }
-                )
+                );
 
-                /*const libroAuxiliar: Libro = this.librosCatalogo[index] as Libro;
-                libroAuxiliar.cantidad = Number(cantidad);
-                session.carrito.push(libroAuxiliar);
-    
-                this.librosCatalogo.splice(index, 1);*/
+                if(libroAux!=null){
+                    console.log("el libro que va al carrito: ", libroAux);
+                    
+                    req.session.carrito.push(libroAux); 
+                }
 
 
 
+                if (index != -1) {
+
+                    if (this.librosCatalogo.length == 1) {
+
+                        req.session.comprando = true;
+                        this.librosCatalogo.pop();
+
+                    } else {
+
+                        req.session.comprando = true;
+                        this.librosCatalogo.splice(index, 1);
+
+                    }
+
+                }
+                req.session.save();
                 res.redirect('/libro/catalogo');
 
+            } else {
+                res.redirect('/usuario/login');
             }
         } catch (e) {
             res.status(500);
@@ -262,28 +284,83 @@ export class LibroController {
     }
 
 
+    //quitar del carrito
+
+    @Post('quitarcarrito')
+    quitarDelCarrito(
+        @Res() res,
+        @Req() req,
+        @Body('idLibro') idLibro: number
+    ) {
+
+        if (req.session.username) {
+
+            const index = req.session.carrito.findIndex(
+                (libroDelCarrito) => {
+                    return libroDelCarrito.id === Number(idLibro);
+                }
+            );
+
+            const libroAux = req.session.carrito[index];
+            console.log("El libro que vuelve al catalogo: ", libroAux);
+
+            const existeYaEnElCatalogo = this.librosCatalogo.some(
+                libroAuxCatalogo => {
+                    return libroAuxCatalogo.id === libroAux.id;
+                }
+            );
+
+            if (!existeYaEnElCatalogo) {
+                this.librosCatalogo.push(libroAux);
+            }
+
+
+            if (index != -1) {
+                if (req.session.carrito.length == 1) {
+                    console.log("A quitar del carrito");
+                    req.session.comprando = true;
+                    req.session.carrito.pop();
+
+
+                } else {
+                    console.log("A quitar del carrito");
+                    req.session.comprando = true;
+                    req.session.carrito.splice(index, 1);
+
+
+                }
+            }
+
+            req.session.save();
+            res.redirect('/libro/carrito');
+
+        } else {
+            res.redirect('/usuario/login');
+        }
+    }
+
+
     // Carrito Cliente
 
     @Get('carrito')
-    async carritoDeCompra(@Res() res, @Session() session) {
+    async carritoDeCompra(@Res() res, @Req() req) {
         try {
-            if (session.username) {
+            if (req.session.username) {
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                const carrito: Libro[] = session.carrito as Libro[];
+                const carrito: Libro[] = req.session.carrito as Libro[];
                 const total = carrito.reduce(
                     (acumulado, libroActual) => {
                         return acumulado + (libroActual.precio * libroActual.cantidad);
                     }, 0
                 );
 
-                res.render('cliente/carritocompras', { carrito: session.carrito, categoriasPorLibro, total });
+                res.render('cliente/carritocompras', { carrito: carrito, categoriasPorLibro, total });
 
             } else {
-
                 res.redirect('/usuario/login');
-
             }
+
         } catch (e) {
             res.status(500);
             res.send({ mensaje: 'Error', codigo: 500 });
