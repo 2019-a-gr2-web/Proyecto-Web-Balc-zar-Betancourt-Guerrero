@@ -16,6 +16,19 @@ export class FacturaEntity {
   numeroTarjeta: string;
 
   @Column({
+    type: 'bigint',
+    name: 'cvcTarjeta',
+    nullable: true,
+  })
+  cvc: string;
+
+  @Column({
+    type: 'date',
+    name: 'fechaCaducidadTarjeta',
+  })
+  fechaCaducidadTarjeta: Date;
+
+  @Column({
     type: 'date',
     name: 'fecha',
   })

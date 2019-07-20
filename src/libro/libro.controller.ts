@@ -18,6 +18,7 @@ export class LibroController {
     estaEditando: boolean = false;
     idLibroEditando: number = null;
     librosCatalogo: LibroEntity[] = [];
+    librosCarrito: Libro[] = [];
     conCarrito: boolean = false;
 
     constructor(private readonly _libroService: LibroService,
@@ -25,6 +26,7 @@ export class LibroController {
         private readonly _historialCategoriaLibroService: HistorialCategoriaLibroService) {
 
         this.estaEditando = false;
+    
     }
 
     @Get('principal')
@@ -53,6 +55,8 @@ export class LibroController {
 
 
                     if (ideditar) { //voy a editar
+
+
                         categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                         this.estaEditando = true;
                         this.idLibroEditando = Number(ideditar);
@@ -200,12 +204,18 @@ export class LibroController {
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                 console.log("COMPRANDO ES: ", session.comprando)
+                
                 if (session.comprando === true) {
+
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
+                
                 } else {
+
+                    this.librosCarrito = [];
                     session.comprando = true;
                     this.librosCatalogo = await this._libroService.buscar();
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
+                
                 }
 
 
@@ -237,7 +247,7 @@ export class LibroController {
                     }
                 );
 
-                let libroAux: Libro=null;
+                let libroAux: Libro = null;
                 this.librosCatalogo.forEach(
                     libro => {
                         if (libro.id == Number(idLibro)) {
@@ -247,10 +257,10 @@ export class LibroController {
                     }
                 );
 
-                if(libroAux!=null){
-                    console.log("el libro que va al carrito: ", libroAux);
-                    
-                    req.session.carrito.push(libroAux); 
+                if (libroAux != null) {
+                   
+                    this.librosCarrito.push(libroAux);
+
                 }
 
 
@@ -295,14 +305,14 @@ export class LibroController {
 
         if (req.session.username) {
 
-            const index = req.session.carrito.findIndex(
+            const index = this.librosCarrito.findIndex(
                 (libroDelCarrito) => {
                     return libroDelCarrito.id === Number(idLibro);
                 }
             );
 
-            const libroAux = req.session.carrito[index];
-            console.log("El libro que vuelve al catalogo: ", libroAux);
+            const libroAux = this.librosCarrito[index] as LibroEntity;
+           
 
             const existeYaEnElCatalogo = this.librosCatalogo.some(
                 libroAuxCatalogo => {
@@ -316,17 +326,15 @@ export class LibroController {
 
 
             if (index != -1) {
-                if (req.session.carrito.length == 1) {
-                    console.log("A quitar del carrito");
-                    req.session.comprando = true;
-                    req.session.carrito.pop();
+                if (this.librosCarrito.length == 1) {
 
+                    req.session.comprando = true;
+                    this.librosCarrito.pop();
 
                 } else {
-                    console.log("A quitar del carrito");
-                    req.session.comprando = true;
-                    req.session.carrito.splice(index, 1);
 
+                    req.session.comprando = true;
+                    this.librosCarrito.splice(index, 1);
 
                 }
             }
@@ -348,7 +356,7 @@ export class LibroController {
             if (req.session.username) {
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                const carrito: Libro[] = req.session.carrito as Libro[];
+                const carrito: Libro[] = this.librosCarrito as Libro[];
                 const total = carrito.reduce(
                     (acumulado, libroActual) => {
                         return acumulado + (libroActual.precio * libroActual.cantidad);

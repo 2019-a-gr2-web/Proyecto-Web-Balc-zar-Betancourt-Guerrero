@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, Session, Req } from "@nestjs/common";
+import { Controller, Get, Res, Post, Body, Session, Req, Query } from "@nestjs/common";
 import { UsuarioService } from "./usuario.service";
 import { Usuario } from "./Interface/usuario";
 import { LibroEntity } from "src/libro/libro.entity";
@@ -13,12 +13,18 @@ export class UsuarioController {
     }
 
     @Get('login')
-    loginvista(@Res() res, @Req() req) {
+    loginvista(@Res() res, @Req() req, @Query('mensaje') mensaje?) {
         if (req.session) {
             req.session.username = undefined;
             req.session.destroy();
         }
-        res.render('login', {});
+
+        if (mensaje) {
+            res.render('login', { mensaje });
+        } else {
+            res.render('login', {});
+        }
+
     }
 
     @Get('registrar')
@@ -92,8 +98,9 @@ export class UsuarioController {
                 }
 
             } else {
-                res.status(400);
-                res.send({ mensaje: 'Error login, datos incorrectos', error: 400 });
+                //res.status(400);
+                ///res.send({ mensaje: 'Error login, datos incorrectos', error: 400 });
+                res.redirect('/usuario/login?mensaje=Error en credenciales');
             }
 
         } catch (e) {
