@@ -76,7 +76,11 @@ export class UsuarioController {
 
 
     @Post('login')
-    async login(@Res() res, @Body() usuario, @Req() req) {
+    async login(
+        @Res() res,
+        @Body() usuario,
+        @Body('fktipousuario') fktipousuario: number,
+        @Req() req) {
 
         try {
             const respuestaAutenticacion = await this._usuarioService.buscarUsuario(usuario.username, usuario.password);
@@ -87,14 +91,16 @@ export class UsuarioController {
                 req.session.username = usuario.username;
                 req.session.password = usuario.password;
 
-                if (userAAutenticar.fkTipoUsuarioId == 1) { //si es admin
+                if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 1)) { //si es admin
 
                     res.redirect('/libro/principal');
 
-                } else { //se iria a la vista del cliente
+                } else if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 2)) { //se iria a la vista del cliente
                     req.session.carrito = [];
                     req.session.comprando = false;
                     res.redirect('/libro/catalogo');
+                } else {
+                    res.redirect('/usuario/login?mensaje=Error tipo de usuario');
                 }
 
             } else {
