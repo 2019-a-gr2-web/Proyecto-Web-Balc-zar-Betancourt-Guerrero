@@ -39,7 +39,7 @@
             background-color: #046E8F;
             color: white;
 
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .btn-xlarge {
@@ -63,10 +63,10 @@
 
         #buttoncarrito {
             margin-top: 50px;
-
-
         }
+
     </style>
+
 </head>
 
 <body>
@@ -153,7 +153,7 @@
                 <div class="card-header text-center">
                     Información de la compra
                 </div>
-
+                <!-- El card que contiene la informacion de la compra -->
                 <div class="card-body">
                     <form action="">
                         <label for="idtotal">Total a pagar:</label>
@@ -161,7 +161,11 @@
                         <label for="idformapago">Forma de pago:</label>
                         <input class="form-control" id="idformapago" type="text" name="" value="Debito"> <br>
                         <label for="idnotarjeta">N° Tarjeta:</label>
-                        <input class="form-control" id="idnotarjeta" type="text" name="">
+                        <input class="form-control" id="idnotarjeta" type="text" name=""> <br>
+                        <label for="idcvctarjeta">CVC Tarjeta:</label>
+                        <input class="form-control" id="idcvctarjeta" type="text" name=""> <br>
+                        <label for="idfechacadtarjeta">Fecha Caducidad Tarjeta:</label>
+                        <input class="form-control" id="idfechacadtarjeta" type="date" name="">
 
                         <div class="text-center">
                             <button id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>

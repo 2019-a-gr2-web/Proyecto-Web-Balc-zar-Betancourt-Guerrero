@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, Session, Req } from "@nestjs/common";
+import { Controller, Get, Res, Post, Body, Session, Req, Query } from "@nestjs/common";
 import { UsuarioService } from "./usuario.service";
 import { Usuario } from "./Interface/usuario";
 import { LibroEntity } from "src/libro/libro.entity";
@@ -13,12 +13,18 @@ export class UsuarioController {
     }
 
     @Get('login')
-    loginvista(@Res() res, @Req() req) {
+    loginvista(@Res() res, @Req() req, @Query('mensaje') mensaje?) {
         if (req.session) {
             req.session.username = undefined;
             req.session.destroy();
         }
-        res.render('login', {});
+
+        if (mensaje) {
+            res.render('login', { mensaje });
+        } else {
+            res.render('login', {});
+        }
+
     }
 
     @Get('registrar')
@@ -70,7 +76,11 @@ export class UsuarioController {
 
 
     @Post('login')
-    async login(@Res() res, @Body() usuario, @Req() req) {
+    async login(
+        @Res() res,
+        @Body() usuario,
+        @Body('fktipousuario') fktipousuario: number,
+        @Req() req) {
 
         try {
             const respuestaAutenticacion = await this._usuarioService.buscarUsuario(usuario.username, usuario.password);
@@ -81,19 +91,22 @@ export class UsuarioController {
                 req.session.username = usuario.username;
                 req.session.password = usuario.password;
 
-                if (userAAutenticar.fkTipoUsuarioId == 1) { //si es admin
+                if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 1)) { //si es admin
 
                     res.redirect('/libro/principal');
 
-                } else { //se iria a la vista del cliente
+                } else if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 2)) { //se iria a la vista del cliente
                     req.session.carrito = [];
                     req.session.comprando = false;
                     res.redirect('/libro/catalogo');
+                } else {
+                    res.redirect('/usuario/login?mensaje=Error tipo de usuario');
                 }
 
             } else {
-                res.status(400);
-                res.send({ mensaje: 'Error login, datos incorrectos', error: 400 });
+                //res.status(400);
+                ///res.send({ mensaje: 'Error login, datos incorrectos', error: 400 });
+                res.redirect('/usuario/login?mensaje=Error en credenciales');
             }
 
         } catch (e) {

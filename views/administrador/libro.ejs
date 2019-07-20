@@ -109,6 +109,25 @@
         #checkboxes label:hover {
             background-color: #1e90ff;
         }
+
+        /***************************/
+
+
+        .modal-dialog {
+            max-width: 350px;
+        }
+
+        aux {
+            color: white;
+        }
+
+        .fa-book {
+            color: white;
+        }
+
+        .navbar-inverse {
+            background-color: red;
+        }
     </style>
 </head>
 
@@ -121,15 +140,15 @@
                     <a class="navbar-brand" href="/usuario/logout">LIBRERÍA</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <!-- class="active" -->
-                    <li><a class="fa fa-book" aria-hidden="true" href="/libro/principal"> LIBROS</a></li>
-                    <!-- <li><a href="/api/instrumento/promocion">Promoción</a></li> -->
-
+                    <li><a class="fa fa-book nav-item" aria-hidden="true" href="/libro/principal"> LIBROS</a></li>
                 </ul>
             </div>
         </nav>
 
+
     </div>
+
+
 
     <div class="row" id="contenidotabla">
 
@@ -266,7 +285,8 @@
                                                 <% categorias.forEach((value)=>{ %>
                                                 <label for="categoria<%=value.id%>">
                                                     <input type="checkbox" id="categoria<%=value.id%>"
-                                                        name="categoria<%=value.id%>" value="<%= value.id%>" /><%= value.nombre %></label>
+                                                        name="categoria<%=value.id%>"
+                                                        value="<%= value.id%>" /><%= value.nombre %></label>
                                                 <% }) %>
                                                 <% } %>
 
@@ -315,19 +335,23 @@
                     <div class="modal-body">
 
                         <label for="idisbn">ISBN:</label>
-                        <input type="text" id="idisbn" placeholder="ISBN..." name="isbn" value="">
+                        <input class="form-control" type="text" id="idisbn" placeholder="ISBN..." name="isbn" value="">
                         <br>
                         <label for="idtitulo">Título:</label>
-                        <input type="text" id="idtitulo" placeholder="Título..." name="titulo" value="">
+                        <input class="form-control" type="text" id="idtitulo" placeholder="Título..." name="titulo"
+                            value="">
                         <br>
                         <label for="idautor">Autor:</label>
-                        <input type="text" id="idautor" placeholder="Autor..." name="autor" value="">
+                        <input class="form-control" type="text" id="idautor" placeholder="Autor..." name="autor"
+                            value="">
                         <br>
                         <label for="idedicion">Edición:</label>
-                        <input type="number" step="any" id="idedicion" placeholder="Edicion..." name="edicion" value="">
+                        <input class="form-control" type="number" step="any" id="idedicion" placeholder="Edicion..."
+                            name="edicion" value="">
                         <br>
                         <label for="ideditorial">Editorial:</label>
-                        <input type="text" id="ideditorial" placeholder="Editorial..." name="editorial" value="">
+                        <input class="form-control" type="text" id="ideditorial" placeholder="Editorial..."
+                            name="editorial" value="">
                         <br>
                         <label for="idcategoria">Categoría:</label>
                         <div class="multiselect">
@@ -351,7 +375,8 @@
                         </div>
                         <br>
                         <label for="idprecio">Precio:</label>
-                        <input type="number" step="any" id="idprecio" placeholder="Precio..." name="precio" value="">
+                        <input class="form-control" type="number" step="any" id="idprecio" placeholder="Precio..."
+                            name="precio" value="">
 
                     </div>
                     <div class="modal-footer">
