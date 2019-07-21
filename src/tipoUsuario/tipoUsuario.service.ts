@@ -9,17 +9,7 @@ export class TipoUsuarioService {
     constructor(@InjectRepository(TipoUsuarioEntity)
     private readonly _tipoUsuariosRepositorio: Repository<TipoUsuarioEntity>) {
 
-        const tipoUsuario1: TipoUsuario = {
-            tipo: "Administrador"
-        };
-
-        const tipoUsuario2: TipoUsuario = {
-            tipo: "Cliente"
-        };
-
-        this.registrarTipoUser(tipoUsuario1);
-        this.registrarTipoUser(tipoUsuario2);
-
+       
     }
 
     registrarTipoUser(tipoUsuario: TipoUsuario) {

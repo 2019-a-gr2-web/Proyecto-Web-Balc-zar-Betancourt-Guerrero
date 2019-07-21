@@ -9,4 +9,5 @@ export interface Usuario {
   nombre: string;
   apellido: string;
   cedula: number;
+  direccion:string;
 }

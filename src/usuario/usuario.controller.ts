@@ -4,6 +4,7 @@ import { Usuario } from "./Interface/usuario";
 import { LibroEntity } from "src/libro/libro.entity";
 import { UsuarioCreateDto } from "./dto/usuario.create.dto";
 import { validate } from "class-validator";
+import { UsuarioEntity } from "./usuario.entity";
 
 @Controller('usuario')
 export class UsuarioController {
@@ -47,6 +48,7 @@ export class UsuarioController {
         usuarioAValidar.nombre = user.nombre;
         usuarioAValidar.apellido = user.apellido;
         usuarioAValidar.cedula = user.cedula;
+        usuarioAValidar.direccion=user.direccion;
 
 
         try {
@@ -86,18 +88,22 @@ export class UsuarioController {
             const respuestaAutenticacion = await this._usuarioService.buscarUsuario(usuario.username, usuario.password);
 
             const userAAutenticar = respuestaAutenticacion[0];
-
+     
+            
             if (userAAutenticar) {
                 req.session.username = usuario.username;
                 req.session.password = usuario.password;
 
-                if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 1)) { //si es admin
-
+                if ((userAAutenticar.fktipousuario == fktipousuario) && (userAAutenticar.fktipousuario == 1)) { //si es admin
+                
                     res.redirect('/libro/principal');
 
-                } else if ((userAAutenticar.fkTipoUsuarioId == fktipousuario) && (userAAutenticar.fkTipoUsuarioId == 2)) { //se iria a la vista del cliente
+                } else if ((userAAutenticar.fktipousuario== fktipousuario) && (userAAutenticar.fktipousuario == 2)) { //se iria a la vista del cliente
                     req.session.carrito = [];
+                    req.session.user = userAAutenticar;
                     req.session.comprando = false;
+                    
+                    
                     res.redirect('/libro/catalogo');
                 } else {
                     res.redirect('/usuario/login?mensaje=Error tipo de usuario');
@@ -111,6 +117,7 @@ export class UsuarioController {
 
         } catch (e) {
             res.status(500);
+            console.log("error: ",e);
             res.send({ mensaje: 'Error', codigo: 500 });
         }
 

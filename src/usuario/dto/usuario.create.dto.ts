@@ -31,5 +31,9 @@ export class UsuarioCreateDto {
     @IsNumber()
     cedula: number;
 
+    @IsNotEmpty()
+    @IsString()
+    direccion: string;
+
 
 }
