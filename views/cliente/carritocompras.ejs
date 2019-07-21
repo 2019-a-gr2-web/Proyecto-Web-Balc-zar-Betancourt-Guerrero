@@ -155,22 +155,23 @@
                 </div>
                 <!-- El card que contiene la informacion de la compra -->
                 <div class="card-body">
-                    <form action="">
+                    <form action="/libro/comprar" method="POST">
                         <label for="idtotal">Total a pagar:</label>
-                        <input class="form-control" id="idtotal" type="text" name="" value="<%= total %>"> <br>
+                        <input class="form-control" id="idtotal" type="text" name="montoTotal" value="<%= total %>"> <br>
                         <label for="idformapago">Forma de pago:</label>
-                        <input class="form-control" id="idformapago" type="text" name="" value="Debito"> <br>
+                        <input class="form-control" id="idformapago" type="text" name="formaPago" value="Debito"> <br>
                         <label for="idnotarjeta">N° Tarjeta:</label>
-                        <input class="form-control" id="idnotarjeta" type="text" name=""> <br>
+                        <input class="form-control" id="idnotarjeta" type="text" name="numeroTarjeta"> <br>
                         <label for="idcvctarjeta">CVC Tarjeta:</label>
-                        <input class="form-control" id="idcvctarjeta" type="text" name=""> <br>
+                        <input class="form-control" id="idcvctarjeta" type="text" name="cvc"> <br>
                         <label for="idfechacadtarjeta">Fecha Caducidad Tarjeta:</label>
-                        <input class="form-control" id="idfechacadtarjeta" type="date" name="">
+                        <input class="form-control" id="idfechacadtarjeta" type="date" name="fechaCaducidadTarjeta">
 
                         <div class="text-center">
-                            <button id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>
+                            <button type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>
                         </div>
 
+                      
                     </form>
 
                 </div>

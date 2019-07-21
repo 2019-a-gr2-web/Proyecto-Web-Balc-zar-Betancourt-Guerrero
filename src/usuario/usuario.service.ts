@@ -14,14 +14,14 @@ export class UsuarioService {
         private readonly _serviceTipoUsuario: TipoUsuarioService) {
 
 
-        const admin: Usuario = {
+        /*const admin: Usuario = {
             usuario: 'admin',
             contrasenia: 'admin',
             nombre: 'Cesar',
             apellido: 'Pazmino',
             cedula: 1725054975,
             fkTipoUsuario: 1
-        }
+        }*/
 
         //this.registrarAdmin(admin);
        
@@ -31,7 +31,8 @@ export class UsuarioService {
     buscarUsuario(user: string, password: string):Promise<any> {
 
         //return this._usuariosRepositorio.find({ usuario: user, contrasenia: password});
-        return this._usuariosRepositorio.query("SELECT * FROM usuario, tipousuario WHERE usuario.fktipousuarioid=tipousuario.id AND "+
+        return this._usuariosRepositorio.query("SELECT usuario.id, usuario.usuario, usuario.contrasenia,usuario.nombre,"+
+        "usuario.apellido, usuario.cedula, usuario.direccion, usuario.fktipousuario FROM usuario, tipousuario WHERE usuario.fktipousuario=tipousuario.id AND "+
             "usuario.usuario="+"'"+user+"'"+" AND usuario.contrasenia="+"'"+password+"';");
 
     }

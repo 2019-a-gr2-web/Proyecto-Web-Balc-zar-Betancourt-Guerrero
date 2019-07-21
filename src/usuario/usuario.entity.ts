@@ -1,4 +1,4 @@
-import { Entity, ManyToOne } from 'typeorm';
+import { Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { Column } from 'typeorm';
 import { PrimaryGeneratedColumn } from 'typeorm';
 import { OneToMany } from 'typeorm';
@@ -46,7 +46,15 @@ export class UsuarioEntity {
   })
   cedula: number;
 
+  @Column({
+    type: 'nvarchar',
+    length: 70,
+    name: 'direccion',
+ })
+  direccion: string;
+
   @ManyToOne(type => TipoUsuarioEntity, tipousuario => tipousuario.usuarios)
+  @JoinColumn({name:'fkTipoUsuario'})
   fkTipoUsuario?: number;
 
   @OneToMany(type => FacturaEntity, facturas => facturas)

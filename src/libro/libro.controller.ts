@@ -10,6 +10,10 @@ import { LibroEntity } from "../libro/libro.entity";
 import { get } from "http";
 import { LibroCreateDto } from "./dto/libro.create.dto";
 import { validate } from "class-validator";
+import { CombineLatestOperator } from "rxjs/internal/observable/combineLatest";
+import { Factura } from "../factura/Interface/factura";
+import { FacturaService } from "../factura/factura.service";
+import { DetalleService } from "../detalle/detalle.service";
 
 
 @Controller('libro')
@@ -23,10 +27,12 @@ export class LibroController {
 
     constructor(private readonly _libroService: LibroService,
         private readonly _categoriaService: CategoriaService,
-        private readonly _historialCategoriaLibroService: HistorialCategoriaLibroService) {
+        private readonly _historialCategoriaLibroService: HistorialCategoriaLibroService,
+        private readonly _facturaService: FacturaService,
+        private readonly _detalleFacturaService: DetalleService) {
 
         this.estaEditando = false;
-    
+
     }
 
     @Get('principal')
@@ -204,18 +210,18 @@ export class LibroController {
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
                 console.log("COMPRANDO ES: ", session.comprando)
-                
+
                 if (session.comprando === true) {
 
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
-                
+
                 } else {
 
                     this.librosCarrito = [];
                     session.comprando = true;
                     this.librosCatalogo = await this._libroService.buscar();
                     res.render('cliente/catalogo', { libros: this.librosCatalogo, categoriasPorLibro: categoriasPorLibro });
-                
+
                 }
 
 
@@ -258,7 +264,7 @@ export class LibroController {
                 );
 
                 if (libroAux != null) {
-                   
+
                     this.librosCarrito.push(libroAux);
 
                 }
@@ -312,7 +318,7 @@ export class LibroController {
             );
 
             const libroAux = this.librosCarrito[index] as LibroEntity;
-           
+
 
             const existeYaEnElCatalogo = this.librosCatalogo.some(
                 libroAuxCatalogo => {
@@ -376,6 +382,44 @@ export class LibroController {
 
 
 
+    }
+
+
+
+    @Post('comprar')
+    async comprar(
+        @Res() res,
+        @Req() req,
+        @Body() factura: Factura) {
+        try {
+
+            if (req.session.username) {
+
+                factura.fechaCaducidadTarjeta = factura.fechaCaducidadTarjeta ? new Date(factura.fechaCaducidadTarjeta) : undefined;
+                factura.fk_usuario = Number(req.session.user.id);
+                factura.direccionCliente=req.session.user.direccion;
+                factura.fecha = new Date();
+
+                
+                const respuestaFacturaCreada = await this._facturaService.registrarFactura(factura);
+
+                this.librosCarrito.forEach(
+                    async libroCarrito => {
+                        await this._detalleFacturaService.registrarDetalle(libroCarrito.id, respuestaFacturaCreada.id, libroCarrito.cantidad);
+                    }
+                );
+
+                res.redirect('/usuario/login');
+
+            } else {
+                res.redirect('/usuario/login');
+            }
+
+        } catch (e) {
+            res.status(500);
+            console.log("Error: ", e);
+            res.send({ mensaje: 'Error', codigo: 500 });
+        }
     }
 
 }

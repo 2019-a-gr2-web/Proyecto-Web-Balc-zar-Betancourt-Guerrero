@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { DetalleEntity } from '../detalle/detalle.entity';
 import { UsuarioEntity } from '../usuario/usuario.entity';
 
@@ -6,25 +6,33 @@ import { UsuarioEntity } from '../usuario/usuario.entity';
 export class FacturaEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({
-    type: 'bigint',
+    type: 'varchar',
     name: 'numeroTarjeta',
     nullable: true,
   })
   numeroTarjeta: string;
 
   @Column({
-    type: 'bigint',
+    type: 'varchar',
     name: 'cvcTarjeta',
     nullable: true,
   })
   cvc: string;
 
   @Column({
+    type: 'varchar',
+    name: 'formaPago',
+    nullable: true,
+  })
+  formaPago: string;
+
+  @Column({
     type: 'date',
     name: 'fechaCaducidadTarjeta',
+    default: '2020-12-31'
   })
   fechaCaducidadTarjeta: Date;
 
@@ -44,10 +52,21 @@ export class FacturaEntity {
   })
   montoTotal: number;
 
+  @Column({
+    type: 'nvarchar',
+    name: 'direccionCliente',
+    nullable: true
+  })
+  direccionCliente: string;
+
+  @Column()
+  fk_usuario: number;
   @ManyToOne(type => UsuarioEntity, usuario => usuario.facturas)
+  @JoinColumn({ name: 'fk_usuario' })
   fkUsuario: UsuarioEntity;
 
+
   @OneToMany(type => DetalleEntity, detalle => detalle)
-  detalles: DetalleEntity[];
+  detalles?: DetalleEntity[];
 
 }

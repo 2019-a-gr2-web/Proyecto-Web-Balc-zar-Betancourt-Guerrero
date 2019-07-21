@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FacturaEntity } from "./factura.entity";
+import { FacturaService } from "./factura.service";
 
 @Module(
     {
@@ -13,8 +14,8 @@ import { FacturaEntity } from "./factura.entity";
             )
         ],
         controllers: [],
-        providers: [],
-        exports: []
+        providers: [FacturaService],
+        exports: [FacturaService]
     }
 )
 export class FacturaModule {
