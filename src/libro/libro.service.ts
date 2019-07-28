@@ -83,13 +83,20 @@ export class LibroService {
     }
 
 
-    obtenerCategoriasPorLibro():Promise<any> {
-        
+    obtenerCategoriasPorLibro(): Promise<any> {
+
         return this._librosRepositorio
-        .query('SELECT libro.id,categoria.nombre,categoria.id as catid FROM libro,historialcategorialibro,categoria WHERE libro.id=historialcategorialibro.librofkid AND categoria.id=historialcategorialibro.categoriafkid');
-        
+            .query('SELECT libro.id,categoria.nombre,categoria.id as catid FROM libro,historialcategorialibro,categoria WHERE libro.id=historialcategorialibro.librofkid AND categoria.id=historialcategorialibro.categoriafkid');
+
     }
 
+
+    obtenerLibrosPorFactura(): Promise<any> {
+
+        return this._librosRepositorio.query('SELECT libro.id, libro.isbn, libro.titulo, libro.precio, detalle.cantidad, detalle.fk_factura' +
+            ' FROM libro, detalle, factura WHERE libro.id = detalle.fk_libro AND detalle.fk_factura = factura.id;');
+
+    }
 
 
 }

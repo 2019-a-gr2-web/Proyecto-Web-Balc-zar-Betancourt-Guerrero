@@ -1,0 +1,198 @@
+<% var idFac=-1 %>
+<% var arregloAux=[] %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <!--revisar esto libreria de iconos fafa-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .navbar {
+            background-color: #046E8F;
+
+        }
+
+        .nav-item,
+        .navbar-brand {
+            color: white;
+        }
+
+        #cuerpoFacturasUser {
+            margin-top: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            border-bottom: 3px groove #046E8F;
+        }
+
+        h4 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 3px groove #046E8F;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- -------------------------NAV BAR-------------- -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/usuario/logout">Librería</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <!-- <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a> -->
+                <a class="nav-item nav-link fa fa-book" href="/libro/catalogo"> Libros</a>
+                <a class="nav-item nav-link fa fa-shopping-cart" href="/libro/carrito"> Carrito</a>
+                <a class="nav-item nav-link fa fa-list-alt" href="/factura/facturas"> Facturas</a>
+
+            </div>
+        </div>
+    </nav>
+    <!-- ---------------------------------------------- -->
+
+
+    <div class="row" id="cuerpoFacturasUser">
+
+        <div class="container">
+            <h2>Facturas del usuario: <%= nombreCompletoUsuario %> </h2>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No. Factura</th>
+                        <th>No. Tarjeta</th>
+                        <th>CVC Tarjeta</th>
+                        <th>Forma de pago</th>
+                        <th>Fecha facturación</th>
+                        <th>Monto total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% const existenFacturas=typeof facturas !== "undefined"; %>
+                    <% if(existenFacturas){ %>
+                    <% facturas.forEach((factura)=>{ %>
+                    <tr>
+                        <td> 00<%= factura.id %></td>
+                        <td><%= factura.numeroTarjeta %></td>
+                        <td><%= factura.cvc %></td>
+                        <td><%= factura.formaPago %></td>
+                        <td><%= factura.fecha %></td>
+                        <td><%= factura.montoTotal %></td>
+                        <td>
+                            <button id="btnaux" onclick="actionListener('<%= factura.id %>')" type="submit"
+                                class="btn btn-primary">
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <% }); %>
+                    <% } %>
+
+                </tbody>
+            </table>
+
+
+
+            <!-- detella de factura -->
+            <div>
+
+                <h4>
+                    Detalle de factura:
+                </h4>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <th>ISBN</th>
+                        <th>Título</th>
+                        <th>Precio unitario</th>
+                        <th>Cantidad</th>
+                    </thead>
+                    <tbody id="cuerpoDetalle">
+
+                    </tbody>
+            </div>
+            <!-- ----------------- -->
+
+        </div>
+    </div>
+
+
+    <script>
+
+        function actionListener(id) {
+
+
+            let libros = [];
+            "<% libros.forEach((item)=>{ %>"
+            libros.push(
+                {
+                    "id": "<%= item.id %>",
+                    "isbn": "<%= item.isbn %>",
+                    "titulo": "<%= item.titulo %>",
+                    "precio": "<%= item.precio %>",
+                    "cantidad": "<%= item.cantidad %>",
+                    "fkfactura": "<%= item.fk_factura %>"
+                });
+            "<% }); %>"
+
+            const etiquetaNueva = "tr";
+
+            var myNode = document.getElementById("cuerpoDetalle");
+
+
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+
+
+            libros.forEach(element => {
+
+
+                if (element.fkfactura == id) {
+
+                    const tablerow = document.createElement(etiquetaNueva);
+                    const contenidoHTML = `
+                    <td>${element.isbn}</td>
+                    <td>${element.titulo}</td>
+                    <td>${element.precio}</td>
+                    <td>${element.cantidad}</td>  
+                    `;
+                    tablerow.innerHTML = contenidoHTML;
+
+                    aniadirEtiqueta("cuerpoDetalle", tablerow);
+                }
+
+            });
+
+        }
+
+
+        function aniadirEtiqueta(idEtiqueta, elementoHTML) {
+            const etiqueta = document.getElementById(idEtiqueta);
+            etiqueta.appendChild(elementoHTML);
+        }
+
+    </script>
+
+</body>
+
+</html>
