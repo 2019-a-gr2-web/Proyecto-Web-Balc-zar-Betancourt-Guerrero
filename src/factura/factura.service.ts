@@ -18,4 +18,10 @@ export class FacturaService {
 
         return this._facturaRepositorio.save(objetoEntidad);
     }
+
+    devolverFacturaSegunUsuario(idUsuario: number): Promise<FacturaEntity[]> {
+
+        return this._facturaRepositorio.find({ fk_usuario: idUsuario });
+
+    }
 }
