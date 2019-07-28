@@ -24,8 +24,8 @@
         #login .container #login-row #login-column #login-box {
             margin-top: 80px;
             max-width: 400px;
-            height: 470px;
-            border: 1px solid #9C9C9C;
+            height: 500px;
+            border: 8px groove #9C9C9C;
             background-color: #046E8F;
         }
 
@@ -63,17 +63,17 @@
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
                         <form id="login-form" class="form" action="/usuario/login" method="post">
-                            <h3 id="refRegistrarse" class="text-center"><i class="fa fa-book" aria-hidden="true"></i>
-                            </h3>
+                            <h1 id="refRegistrarse" class="text-center"><i class="fa fa-book" aria-hidden="true"></i>
+                            </h1>
 
                             <div class="form-group">
-                                <label for="username" class="text-info"></label><br>
+                                <label for="username" class="text-info"></label>
                                 <input type="text" name="username" id="username" class="form-control"
                                     placeholder="Nombre de usuario">
                             </div>
 
                             <div class="form-group">
-                                <label for="password" class="text-info"></label><br>
+                                <label for="password" class="text-info"></label>
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="Contraseña">
                             </div>
@@ -90,7 +90,8 @@
                                 <button id="btoningresar" class="form-control">INGRESAR</button>
                                 <% const existeMensaje=typeof mensaje !== "undefined"; %>
                                 <% if(existeMensaje){ %>
-                                <label id="alertaErrorLogin">Atención: <%=mensaje%></label>
+
+                                <label id="alertaErrorLogin">¡Atención!: <%=mensaje%></label>
                                 <% } %>
                             </div>
 
@@ -112,6 +113,7 @@
         function enviarMensajeError() {
             alert("Atención: error en credenciales.")
         }
+
     </script>
 </body>
 
