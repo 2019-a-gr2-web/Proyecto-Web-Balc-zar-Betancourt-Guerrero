@@ -49,11 +49,11 @@
             -webkit-border-radius: 8px;
             -moz-border-radius: 8px;
             border-radius: 8px;
-            border: groove white 2px;
+            border: groove #046E8F 3px;
         }
 
         .card {
-            background-color: #69A8BC;
+            background-color: white;
         }
 
         #unidadcatalogo {
@@ -65,6 +65,9 @@
             margin-top: 50px;
         }
 
+        #cardinfocompra{
+            background-color: #69A8BC;
+        }
     </style>
 
 </head>
@@ -104,21 +107,48 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-8">
-                            <p>
-                                <strong>ISBN:</strong> <%= libro.isbn %><br>
-                                <strong>TÍTULO:</strong> <%= libro.titulo %><br>
-                                <strong>AUTOR:</strong> <%= libro.autor %><br>
-                                <strong>CATEGORÍAS:</strong>
-                                <% categoriasPorLibro.forEach((cat)=>{ %>
-                                <% if(cat.id==libro.id){ %>
-                                <%= cat.nombre %>
-                                <% } %>
-                                <% }); %> <br>
-                                <strong>EDICIÓN:</strong> <%= libro.edicion %><br>
-                                <strong>EDITORIAL:</strong> <%= libro.editorial %><br>
-                                <strong>PRECIO:</strong> <%= libro.precio %> <br>
-                                <strong>CANTIDAD:</strong> <%= libro.cantidad %>
-                            </p>
+                            <table>
+                                <tbody id="tablaLibros">
+                                    <tr>
+                                        <td><strong>ISBN:</strong></td>
+                                        <td><%= libro.isbn %><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>TÍTULO:</strong></td>
+                                        <td><%= libro.titulo %><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>AUTOR:</strong></td>
+                                        <td><%= libro.autor %> <br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CATEGORÍAS:</strong></td>
+                                        <td>
+                                            <% categoriasPorLibro.forEach((cat)=>{ %>
+                                            <% if(cat.id==libro.id){ %>
+                                            <%= cat.nombre %>
+                                            <% } %>
+                                            <% }); %> <br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>EDICIÓN:</strong></td>
+                                        <td><%= libro.edicion %><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>EDITORIAL:</strong></td>
+                                        <td><%= libro.editorial %><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>PRECIO:</strong></td>
+                                        <td><%= libro.precio %></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CANTIDAD:</strong></td>
+                                        <td><%= libro.cantidad %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                         <div class="col-lg-4 text-center">
@@ -155,12 +185,14 @@
                     Información de la compra
                 </div>
                 <!-- El card que contiene la informacion de la compra -->
-                <div class="card-body">
+                <div id="cardinfocompra" class="card-body">
                     <form action="/libro/comprar" method="POST">
                         <label for="idtotal">Total a pagar:</label>
-                        <input class="form-control" id="idtotal" type="text" name="montoTotal" value="<%= total %>"> <br>
+                        <input readonly class="form-control" id="idtotal" type="text" name="montoTotal"
+                            value="<%= total %>"> <br>
                         <label for="idformapago">Forma de pago:</label>
-                        <input class="form-control" id="idformapago" type="text" name="formaPago" value="Debito"> <br>
+                        <input readonly class="form-control" id="idformapago" type="text" name="formaPago"
+                            value="Debito"> <br>
                         <label for="idnotarjeta">N° Tarjeta:</label>
                         <input class="form-control" id="idnotarjeta" type="text" name="numeroTarjeta"> <br>
                         <label for="idcvctarjeta">CVC Tarjeta:</label>
@@ -172,7 +204,7 @@
                             <button type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>
                         </div>
 
-                      
+
                     </form>
 
                 </div>

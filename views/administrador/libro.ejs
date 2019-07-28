@@ -129,6 +129,10 @@
         .navbar-inverse {
             background-color: red;
         }
+
+        #tuplaEditar {
+            background-color: #69A8BC;
+        }
     </style>
 </head>
 
@@ -255,46 +259,31 @@
                             <!-- PARA EDITAR, si existe un Libro a editar, se genera esto de aqui abajo -->
                             <% const existeLibroEditar=typeof libroEditar !== "undefined"; %>
                                         <% if(existeLibroEditar){ %>
-                            <tr>
+                            <tr id="tuplaEditar">
                                 <form action="/libro/registrar" method="POST">
 
-                                    <td><input id="inputsEditar" type="text" name="isbn"
+                                    <td><input maxlength="30" id="inputsEditar" type="text" name="isbn"
                                             value="<%= libroEditar.isbn %>"></td>
-                                    <td><input id="inputsEditar" type="text" name="titulo"
+                                    <td><input maxlength="50" id="inputsEditar" type="text" name="titulo"
                                             value="<%= libroEditar.titulo %>"></td>
-                                    <td><input id="inputsEditar" type="text" name="autor"
+                                    <td><input maxlength="30" id="inputsEditar" type="text" name="autor"
                                             value="<%= libroEditar.autor %>"></td>
                                     <td><input id="inputsEditar" type="number" name="edicion"
                                             value="<%= libroEditar.edicion %>"></td>
-                                    <td><input id="inputsEditar" type="text" name="editorial"
+                                    <td><input maxlength="20" id="inputsEditar" type="text" name="editorial"
                                             value="<%= libroEditar.editorial %>"></td>
                                     <td>
-                                        <div id="inputsEditar" class="multiselect">
-                                            <div class="selectBox" onclick="showCheckboxes()">
-                                                <select>
-                                                    <option>Escoja categorías</option>
-                                                </select>
-                                                <div class="overSelect"></div>
-                                            </div>
-                                            <div id="checkboxes">
-                                                <% const existeCategoria=typeof categorias !== "undefined"; %>
-                                                <% if(existeCategoria){ %>
-                                                <% categorias.forEach((value)=>{ %>
-                                                <label for="categoria<%=value.id%>">
-                                                    <input type="checkbox" id="categoria<%=value.id%>"
-                                                        name="categoria<%=value.id%>"
-                                                        value="<%= value.id%>" /><%= value.nombre %></label>
-                                                <% }) %>
-                                                <% } %>
-
-                                            </div>
-                                        </div>
+                                        <% categoriasPorLibro.forEach((cat)=>{ %>
+                                        <% if(cat.id==libroEditar.id){ %>
+                                        <%= cat.nombre %>
+                                        <% } %>
+                                        <% }); %>
                                     </td>
-                                    <td><input id="inputsEditar" type="number" step="any" name="precio"
+                                    <td><input id="inputsEditar" type="number" step=".01" name="precio"
                                             value="<%= libroEditar.precio %>">
                                     </td>
                                     <td><input id="inputsEditar" type="disabled" name="estado"
-                                            value="<%= libroEditar.estado %>" disabled>
+                                            value="<%= libroEditar.estado %>" readonly>
                                     </td>
                                     <td colspan="2"><button class="btn">Editar!</button></td>
                                 </form>
@@ -332,23 +321,24 @@
                     <div class="modal-body">
 
                         <label for="idisbn">ISBN:</label>
-                        <input class="form-control" type="text" id="idisbn" placeholder="ISBN..." name="isbn" value="">
+                        <input maxlength="30" class="form-control" type="text" id="idisbn" placeholder="ISBN..."
+                            name="isbn" value="" required>
                         <br>
                         <label for="idtitulo">Título:</label>
-                        <input class="form-control" type="text" id="idtitulo" placeholder="Título..." name="titulo"
-                            value="">
+                        <input maxlength="50" class="form-control" type="text" id="idtitulo" placeholder="Título..."
+                            name="titulo" value="" required>
                         <br>
                         <label for="idautor">Autor:</label>
-                        <input class="form-control" type="text" id="idautor" placeholder="Autor..." name="autor"
-                            value="">
+                        <input maxlength="30" class="form-control" type="text" id="idautor" placeholder="Autor..."
+                            name="autor" value="" required>
                         <br>
                         <label for="idedicion">Edición:</label>
-                        <input class="form-control" type="number" step="any" id="idedicion" placeholder="Edicion..."
-                            name="edicion" value="">
+                        <input class="form-control" type="number" step="any" id="idedicion"
+                            placeholder="Edicion..." name="edicion" value="" required>
                         <br>
                         <label for="ideditorial">Editorial:</label>
-                        <input class="form-control" type="text" id="ideditorial" placeholder="Editorial..."
-                            name="editorial" value="">
+                        <input maxlength="20" class="form-control" type="text" id="ideditorial"
+                            placeholder="Editorial..." name="editorial" value="" required>
                         <br>
                         <label for="idcategoria">Categoría:</label>
                         <div class="multiselect">
@@ -372,8 +362,11 @@
                         </div>
                         <br>
                         <label for="idprecio">Precio:</label>
-                        <input class="form-control" type="number" step="any" id="idprecio" placeholder="Precio..."
-                            name="precio" value="">
+                        <input class="form-control" type="number" step=".01" id="idprecio" placeholder="Precio..."
+                            name="precio" value="" required>
+                        <br>
+                        <label for="idestado">Estado:</label>
+                        <input class="form-control" id="idestado" type="disabled" name="estado" value="Disponible" readonly>
 
                     </div>
                     <div class="modal-footer">

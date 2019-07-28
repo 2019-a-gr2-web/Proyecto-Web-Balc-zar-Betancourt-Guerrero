@@ -2,15 +2,10 @@ import { Controller, Get, Res, Post, Body, Session, Query, Req } from "@nestjs/c
 import { Libro } from "./Interface/libro";
 import { LibroService } from "./libro.service";
 import { CategoriaService } from "../categoria/categoria.service";
-//import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/historialCategoriaLibro.entity";
-import { HistorialCategoriaLibro } from "../historialCategoriaLibro/Interface/historialCategoriaLibro";
 import { HistorialCategoriaLibroService } from "../historialCategoriaLibro/historialCategoriaLibro.service";
-import { HistorialCategoriaLibroEntity } from "../historialCategoriaLibro/historialCategoriaLibro.entity";
 import { LibroEntity } from "../libro/libro.entity";
-import { get } from "http";
 import { LibroCreateDto } from "./dto/libro.create.dto";
 import { validate } from "class-validator";
-import { CombineLatestOperator } from "rxjs/internal/observable/combineLatest";
 import { Factura } from "../factura/Interface/factura";
 import { FacturaService } from "../factura/factura.service";
 import { DetalleService } from "../detalle/detalle.service";
@@ -38,45 +33,34 @@ export class LibroController {
     @Get('principal')
     async vistaAdministradorLibro(
         @Session() session, @Res() res,
-        @Query('ideditar') ideditar?: number,
-        @Query('stringbuscar') stringbuscar?: string,
-        @Query('banderabuscar') banderabuscar?: number) {
+        @Query('ideditar') ideditar?: number) {
 
         try {
             if (session.username) { //si es que existe la sesion significa que estamos logeados
-                let categoriasPorLibro;
-                const categorias = await this._categoriaService.buscar(); //las categorias existentes que se van a mandar para escoger en el registro de libros
+
                 this.estaEditando = false;
-                let libros;
 
-                if (stringbuscar) { //si se esta buscando
-                    categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                    libros = await this._libroService.buscarporParametro(Number(banderabuscar), stringbuscar);
+                const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
+                const categorias = await this._categoriaService.buscar(); //las categorias existentes que se van a mandar para escoger en el registro de libros 
+                const libros = await this._libroService.buscar();
+
+                if (ideditar) { //voy a editar
+
+                    this.estaEditando = true;
+
+                    this.idLibroEditando = Number(ideditar);
+
+                    const respuestaBusquedaLibroEditar = await this._libroService.buscarporId(Number(ideditar));
+
+                    const libroEditar = respuestaBusquedaLibroEditar[0];
+
+                    res.render('administrador/libro', { categorias, libros, libroEditar, categoriasPorLibro });
+
+                } else { //no voy a editar
+
                     res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
-
-                } else { //no estoy buscando nada en especifico, quiero todos los libros
-
-
-                    libros = await this._libroService.buscar();
-
-
-                    if (ideditar) { //voy a editar
-
-
-                        categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                        this.estaEditando = true;
-                        this.idLibroEditando = Number(ideditar);
-
-                        const respuestaBusquedaLibroEditar = await this._libroService.buscarporId(Number(ideditar));
-                        const libroEditar = respuestaBusquedaLibroEditar[0];
-
-                        res.render('administrador/libro', { categorias, libros, libroEditar, categoriasPorLibro });
-
-                    } else { //no voy a editar
-                        categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                        res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
-                    }
                 }
+
 
             } else {
                 res.redirect('/usuario/login');
@@ -98,7 +82,7 @@ export class LibroController {
 
             libro.edicion = Number(libro.edicion);
             libro.precio = Number(libro.precio);
-            libro.estado = "Disponible";
+
 
             //aniado las categorias
             const categoriasArray: number[] = [];
@@ -142,10 +126,12 @@ export class LibroController {
                 if (!this.estaEditando) { //SI NO SE ESTA EDITANDO, INSERTA
 
                     this.estaEditando = false;
-                    //registro el libro
+
+                    //registro el libro EDITADO
                     const respuestaLibroRegistrado = await this._libroService.registrar(libro);
 
                     //registro las de rompimiento (si hay muchas categorias)
+
                     categoriasArray.forEach(
                         async categoriaid => {
                             await this._historialCategoriaLibroService.registrarHistorialCategoria(respuestaLibroRegistrado.id, categoriaid);
@@ -194,10 +180,7 @@ export class LibroController {
     }
 
 
-
-
     /*----------------CLIENTE----------------*/
-
 
 
     @Get('catalogo')
@@ -209,7 +192,7 @@ export class LibroController {
             if (session.username) { //loggeado
 
                 const categoriasPorLibro = await this._libroService.obtenerCategoriasPorLibro();
-                console.log("COMPRANDO ES: ", session.comprando)
+
 
                 if (session.comprando === true) {
 
@@ -268,8 +251,6 @@ export class LibroController {
                     this.librosCarrito.push(libroAux);
 
                 }
-
-
 
                 if (index != -1) {
 
@@ -385,7 +366,6 @@ export class LibroController {
     }
 
 
-
     @Post('comprar')
     async comprar(
         @Res() res,
@@ -397,10 +377,10 @@ export class LibroController {
 
                 factura.fechaCaducidadTarjeta = factura.fechaCaducidadTarjeta ? new Date(factura.fechaCaducidadTarjeta) : undefined;
                 factura.fk_usuario = Number(req.session.user.id);
-                factura.direccionCliente=req.session.user.direccion;
+                factura.direccionCliente = req.session.user.direccion;
                 factura.fecha = new Date();
 
-                
+
                 const respuestaFacturaCreada = await this._facturaService.registrarFactura(factura);
 
                 this.librosCarrito.forEach(
@@ -409,7 +389,11 @@ export class LibroController {
                     }
                 );
 
-                res.redirect('/usuario/login');
+                this.librosCarrito = [];
+                this.librosCatalogo = [];
+                req.session.comprando = false;
+
+                res.redirect('/factura/facturas');
 
             } else {
                 res.redirect('/usuario/login');
