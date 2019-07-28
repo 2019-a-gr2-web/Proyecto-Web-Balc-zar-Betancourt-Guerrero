@@ -166,30 +166,26 @@
                 <div class="panel-body">
                     <div style="margin-left: 15px">
 
-                        <form action="/libro/principal">
-                            <div class="col-sm-1">
-                                <button class="btn" type="submit"><i class="fa fa-search"
-                                        aria-hidden="true"></i></button>
-                            </div>
-                            <div class="dropdown col-sm-6">
-                                <input style="margin-right: 10px" class="form-control" id="stringbuscar" type="text"
-                                    placeholder="Buscar.." name="stringbuscar">
-                            </div>
-                            <div class="col-sm-5">
 
-                                <div class="form-group">
-                                    <!-- (change)="selectParametro($event)"" -->
+                        <div class="col-sm-6">
 
-                                    <select class="form-control" id="banderabuscar" name="banderabuscar">
-                                        <option>Seleccione una opción</option>
-                                        <option value="0">Autor</option>
-                                        <option value="1">Título</option>
-                                        <option value="2">Categoría</option>
+                            <div class="form-group">
 
-                                    </select>
-                                </div>
+
+                                <select class="form-control" id="banderabuscar" name="banderabuscar">
+                                    <option>Seleccione una opción</option>
+                                    <option value="0">Autor</option>
+                                    <option value="1">Título</option>
+                                    <option value="2">Categoría</option>
+
+                                </select>
                             </div>
-                        </form>
+                        </div>
+                        <div class="dropdown col-sm-6">
+                            <input style="margin-right: 10px" class="form-control" id="stringbuscar" type="text"
+                                placeholder="Buscar.." name="stringbuscar" onkeyup="myFunction()">
+                        </div>
+
 
 
 
@@ -210,7 +206,7 @@
                                 <th colspan="2">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tablaLibros">
                             <% const existenLibros=typeof libros !== "undefined"; %>
                             <% if(existenLibros){ %>
                             <% libros.forEach((libro)=>{ %>
@@ -410,7 +406,44 @@
                 checkboxes.style.display = "none";
                 expanded = false;
             }
-        }</script>
+        }
+
+
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("stringbuscar");
+            parametro = document.getElementById("banderabuscar").value;
+            filter = input.value.toUpperCase();
+            table = document.getElementById("tablaLibros");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+
+                if (Number(parametro) == 0) {
+
+                    td = tr[i].getElementsByTagName("td")[2];
+
+                } else if (Number(parametro) == 1) {
+
+                    td = tr[i].getElementsByTagName("td")[1];
+
+                } else if (Number(parametro) == 2) {
+
+                    td = tr[i].getElementsByTagName("td")[5];
+                }
+
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+    </script>
 
 </body>
 
