@@ -5,10 +5,15 @@ import { AppModule } from './app.module';
 const express = require('express');
 import * as session from 'express-session'; // Typescript
 const FileStore = require('session-file-store')(session); // Nodejs
+var favicon = require('serve-favicon');
+var path = require('path');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  app.use(express.static('publico'));
   // @ts-ignore
+
   app.set('view engine', 'ejs');
 
 

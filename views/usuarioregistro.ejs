@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Librería</title>
+    <link rel="icon" href="/libro.ico" type="icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -43,6 +44,10 @@
 
         h3 {
             color: white;
+        }
+
+        #idpassword {
+            text-transform: lowercase;
         }
     </style>
 </head>
@@ -85,12 +90,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="password" class="text-info"></label><br>
-                                <input maxlength="10" type="password" name="contrasenia" id="password"
+                                <label for="idpassword" class="text-info"></label><br>
+                                <input maxlength="10" type="password" name="contrasenia" id="idpassword"
                                     class="form-control" placeholder="Contraseña" required>
                             </div>
 
-                            <div class="form-group">
+                            <div class=" form-group">
                                 <label for="direccion" class="text-info"></label><br>
                                 <input maxlength="50" type="text" name="direccion" id="direccion" class="form-control"
                                     placeholder="Dirección" required>
@@ -115,6 +120,8 @@
             </div>
         </div>
     </div>
+
+
 </body>
 
 </html>
