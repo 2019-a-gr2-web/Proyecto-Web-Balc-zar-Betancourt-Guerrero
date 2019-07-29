@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Librería</title>
+    <link rel="icon" href="/libro.ico" type="icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -53,7 +54,7 @@
         }
 
         .card {
-            background-color: white;
+            background-color: #FDFCEF;
         }
 
         #unidadcatalogo {
@@ -65,7 +66,7 @@
             margin-top: 50px;
         }
 
-        #cardinfocompra{
+        #cardinfocompra {
             background-color: #69A8BC;
         }
     </style>
@@ -194,11 +195,17 @@
                         <input readonly class="form-control" id="idformapago" type="text" name="formaPago"
                             value="Debito"> <br>
                         <label for="idnotarjeta">N° Tarjeta:</label>
-                        <input class="form-control" id="idnotarjeta" type="text" name="numeroTarjeta"> <br>
+                        <input maxlength="16" minlength="16" class="form-control" id="idnotarjeta" type="text"
+                            name="numeroTarjeta" pattern="^[0-9]*$" required
+                            data-toggle="tooltip"
+                            title="El No de Tarjeta debe tener 16 caracteres numéricos"> <br>
                         <label for="idcvctarjeta">CVC Tarjeta:</label>
-                        <input class="form-control" id="idcvctarjeta" type="text" name="cvc"> <br>
+                        <input maxlength="3" minlength="3" class="form-control" id="idcvctarjeta" type="text" name="cvc"
+                            pattern="^[0-9]*$" required data-toggle="tooltip"
+                            title="El CVC debe tener 3 caracteres numéricos"> <br>
                         <label for="idfechacadtarjeta">Fecha Caducidad Tarjeta:</label>
-                        <input class="form-control" id="idfechacadtarjeta" type="date" name="fechaCaducidadTarjeta">
+                        <input class="form-control" id="idfechacadtarjeta" type="date" name="fechaCaducidadTarjeta"
+                            required>
 
                         <div class="text-center">
                             <button type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>
@@ -215,7 +222,11 @@
 
     </div>
 
-
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
 </body>
 

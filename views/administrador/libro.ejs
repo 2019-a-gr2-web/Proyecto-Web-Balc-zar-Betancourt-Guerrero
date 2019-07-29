@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Librería</title>
+    <link rel="icon" href="/libro.ico" type="icon">
 
 
 
@@ -37,15 +38,20 @@
             table-layout: fixed;
         }
 
+        table,
+        thead,
+        tbody,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
         th {
             background-color: #046E8F;
             color: white;
         }
 
-        #panel_head {
-            /*background-color: #faf2f2;*/
-            background: white;
-        }
+
 
         button {
             background-color: #046E8F;
@@ -133,6 +139,23 @@
         #tuplaEditar {
             background-color: #69A8BC;
         }
+
+        .btnacciones {
+            font-size: 13px;
+        }
+
+        .panel {
+            border: #046E8F 2px groove;
+        }
+
+        .panel-heading {
+            border-bottom: #046E8F 2px groove;
+            background-color: #FDFCEF;
+        }
+
+        .panel-body {
+            background-color: #FDFCEF;
+        }
     </style>
 </head>
 
@@ -160,7 +183,7 @@
         <div class="col-lg-1"></div>
 
         <div class="col-lg-10 container">
-            <div class="panel panel-default">
+            <div class="panel">
                 <div id="panel_head" class="panel-heading text-center">
                     <button data-toggle="modal" data-target="#myModal" class="btn center-block"><i
                             class="fa fa-plus-circle"></i>
@@ -196,7 +219,7 @@
 
                     </div>
 
-                    <table class="table table-bordered" id="tablainstrumentos">
+                    <table class="table" id="tablainstrumentos">
                         <thead>
                             <tr>
                                 <th>ISBN</th>
@@ -235,7 +258,7 @@
                                 <td>
                                     <form action="/libro/principal" method="GET">
                                         <input type="hidden" id="ideditar" name="ideditar" value="<%= libro.id %>">
-                                        <button class="btn fa fa-pencil"> Editar</button>
+                                        <button class="btn fa fa-pencil btnacciones"> Editar</button>
                                     </form>
                                 </td>
 
@@ -244,9 +267,9 @@
                                         <input type="hidden" name="id" value="<%= libro.id %>">
                                         <input type="hidden" name="estado" value="<%= libro.estado %>">
                                         <% if(libro.estado=="Disponible"){ %>
-                                        <button class="btn fa fa-minus-circle"> Desactivar</button>
+                                        <button class="btn fa fa-minus-circle btnacciones"> Desactivar</button>
                                         <% }else{ %>
-                                        <button class="btn fa fa-plus-circle"> Activar</button>
+                                        <button class="btn fa fa-plus-circle btnacciones"> Activar</button>
                                         <%}%>
                                     </form>
                                 </td>
@@ -333,8 +356,8 @@
                             name="autor" value="" required>
                         <br>
                         <label for="idedicion">Edición:</label>
-                        <input class="form-control" type="number" step="any" id="idedicion"
-                            placeholder="Edicion..." name="edicion" value="" required>
+                        <input class="form-control" type="number" step="any" id="idedicion" placeholder="Edicion..."
+                            name="edicion" value="" required>
                         <br>
                         <label for="ideditorial">Editorial:</label>
                         <input maxlength="20" class="form-control" type="text" id="ideditorial"
@@ -353,8 +376,8 @@
                                 <% if(existeCategoria){ %>
                                 <% categorias.forEach((value)=>{ %>
                                 <label for="categoria<%=value.id%>">
-                                    <input type="checkbox" id="categoria<%=value.id%>"
-                                        name="categoria<%=value.id%>" /><%= value.nombre %></label>
+                                    <input type="checkbox" id="categoria<%=value.id%>" name="categoria<%=value.id%>" />
+                                    <%= value.nombre %></label>
                                 <% }) %>
                                 <% } %>
 
@@ -366,7 +389,8 @@
                             name="precio" value="" required>
                         <br>
                         <label for="idestado">Estado:</label>
-                        <input class="form-control" id="idestado" type="disabled" name="estado" value="Disponible" readonly>
+                        <input class="form-control" id="idestado" type="disabled" name="estado" value="Disponible"
+                            readonly>
 
                     </div>
                     <div class="modal-footer">
@@ -436,6 +460,17 @@
         }
 
 
+        /*$(document).ready(function () {
+            $("#myModel").on("hide.bs.collapse", function () {
+                $(".btn").html('<span class="glyphicon glyphicon-collapse-down"></span> Open');
+            });
+            $("#demo").on("show.bs.collapse", function () {
+                $(".btn").html('<span class="glyphicon glyphicon-collapse-up"></span> Close');
+            });
+            $('#myModal').on('shown.bs.modal', function (e) {
+                alert('Modal is successfully shown!');
+            });
+        });*/
     </script>
 
 </body>

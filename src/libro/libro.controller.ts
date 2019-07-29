@@ -167,7 +167,7 @@ export class LibroController {
     ) {
         try {
 
-            const respuestaCambioEstado = await Promise.all([this._libroService.cambiarEstado(Number(id), estado)]);
+            const respuestaCambioEstado = await this._libroService.cambiarEstado(Number(id), estado);
             res.redirect('/libro/principal');
 
         } catch (e) {
@@ -267,7 +267,7 @@ export class LibroController {
                     }
 
                 }
-                req.session.save();
+
                 res.redirect('/libro/catalogo');
 
             } else {
