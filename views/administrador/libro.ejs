@@ -156,6 +156,11 @@
         .panel-body {
             background-color: #FDFCEF;
         }
+
+        #alertaErrorLibro {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -176,6 +181,12 @@
 
     </div>
 
+    <div class="container">
+        <% const existeMensaje=typeof mensaje !== "undefined"; %>
+        <% if(existeMensaje){ %>
+        <label id="alertaErrorLibro">¡Atención!: <%=mensaje%></label>
+        <% } %>
+    </div>
 
 
     <div class="row" id="contenidotabla">
