@@ -297,15 +297,15 @@
                                 <form action="/libro/registrar" method="POST">
 
                                     <td><input maxlength="30" id="inputsEditar" type="text" name="isbn"
-                                            value="<%= libroEditar.isbn %>"></td>
+                                            value="<%= libroEditar.isbn %>" required></td>
                                     <td><input maxlength="50" id="inputsEditar" type="text" name="titulo"
-                                            value="<%= libroEditar.titulo %>"></td>
+                                            value="<%= libroEditar.titulo %>" required></td>
                                     <td><input maxlength="30" id="inputsEditar" type="text" name="autor"
-                                            value="<%= libroEditar.autor %>"></td>
+                                            value="<%= libroEditar.autor %>" required></td>
                                     <td><input id="inputsEditar" type="number" name="edicion"
-                                            value="<%= libroEditar.edicion %>"></td>
+                                            value="<%= libroEditar.edicion %>" required></td>
                                     <td><input maxlength="20" id="inputsEditar" type="text" name="editorial"
-                                            value="<%= libroEditar.editorial %>"></td>
+                                            value="<%= libroEditar.editorial %>" required></td>
                                     <td>
                                         <% categoriasPorLibro.forEach((cat)=>{ %>
                                         <% if(cat.id==libroEditar.id){ %>
@@ -314,7 +314,7 @@
                                         <% }); %>
                                     </td>
                                     <td><input id="inputsEditar" type="number" step=".01" name="precio"
-                                            value="<%= libroEditar.precio %>">
+                                            value="<%= libroEditar.precio %>" required>
                                     </td>
                                     <td><input id="inputsEditar" type="disabled" name="estado"
                                             value="<%= libroEditar.estado %>" readonly>
