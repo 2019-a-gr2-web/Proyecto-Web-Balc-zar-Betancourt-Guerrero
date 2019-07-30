@@ -69,6 +69,10 @@
         #cardinfocompra {
             background-color: #69A8BC;
         }
+
+        #alertaErrorCompra {
+            color: red;
+        }
     </style>
 
 </head>
@@ -196,8 +200,7 @@
                             value="Debito"> <br>
                         <label for="idnotarjeta">N° Tarjeta:</label>
                         <input maxlength="16" minlength="16" class="form-control" id="idnotarjeta" type="text"
-                            name="numeroTarjeta" pattern="^[0-9]*$" required
-                            data-toggle="tooltip"
+                            name="numeroTarjeta" pattern="^[0-9]*$" required data-toggle="tooltip"
                             title="El No de Tarjeta debe tener 16 caracteres numéricos"> <br>
                         <label for="idcvctarjeta">CVC Tarjeta:</label>
                         <input maxlength="3" minlength="3" class="form-control" id="idcvctarjeta" type="text" name="cvc"
@@ -208,9 +211,19 @@
                             required>
 
                         <div class="text-center">
-                            <button type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check"> Comprar</button>
+                            <% if (Number(total)==0){ %>
+                            <button disabled type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check">
+                                Comprar</button>
+                            <% }else{ %>
+                            <button type="submit" id="btnsubmitcompra" class="btn btn-lg fa fa-check">
+                                Comprar</button>
+                            <% } %>
                         </div>
 
+                        <% const existeMensaje=typeof mensaje !== "undefined"; %>
+                        <% if(existeMensaje){ %>
+                        <label id="alertaErrorCompra">¡Atención!: <%=mensaje%></label>
+                        <% } %>
 
                     </form>
 

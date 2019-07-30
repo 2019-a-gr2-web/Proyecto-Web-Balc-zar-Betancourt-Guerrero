@@ -32,7 +32,9 @@ export class LibroController {
 
     @Get('principal')
     async vistaAdministradorLibro(
-        @Session() session, @Res() res,
+        @Session() session,
+        @Res() res,
+        @Query('mensaje') mensaje,
         @Query('ideditar') ideditar?: number) {
 
         try {
@@ -58,7 +60,11 @@ export class LibroController {
 
                 } else { //no voy a editar
 
-                    res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
+                    if (mensaje) {
+                        res.render('administrador/libro', { categorias, libros, categoriasPorLibro, mensaje });
+                    } else {
+                        res.render('administrador/libro', { categorias, libros, categoriasPorLibro });
+                    }
                 }
 
 
@@ -119,7 +125,7 @@ export class LibroController {
             if (errores.length > 0) {//Errores en la validacion
                 console.error(errores);
 
-                //res.redirect('/api/dieguito/crearvista?mensaje=hay_un_error');
+                res.redirect('/libro/principal?mensaje=Error en parametros de registro de libro');
                 //manejar el error
             } else {
 
@@ -338,7 +344,11 @@ export class LibroController {
     // Carrito Cliente
 
     @Get('carrito')
-    async carritoDeCompra(@Res() res, @Req() req) {
+    async carritoDeCompra(
+        @Res() res,
+        @Req() req,
+        @Query('mensaje') mensaje?) {
+
         try {
             if (req.session.username) {
 
@@ -350,7 +360,11 @@ export class LibroController {
                     }, 0
                 );
 
-                res.render('cliente/carritocompras', { carrito: carrito, categoriasPorLibro, total });
+                if (mensaje) {
+                    res.render('cliente/carritocompras', { carrito: carrito, categoriasPorLibro, total, mensaje });
+                } else {
+                    res.render('cliente/carritocompras', { carrito: carrito, categoriasPorLibro, total });
+                }
 
             } else {
                 res.redirect('/usuario/login');
@@ -375,25 +389,33 @@ export class LibroController {
 
             if (req.session.username) {
 
-                factura.fechaCaducidadTarjeta = factura.fechaCaducidadTarjeta ? new Date(factura.fechaCaducidadTarjeta) : undefined;
-                factura.fk_usuario = Number(req.session.user.id);
-                factura.direccionCliente = req.session.user.direccion;
-                factura.fecha = new Date();
+                if (Number(factura.montoTotal) == 0) {
+
+                    res.redirect('/libro/carrito?mensaje=No hay ningun libro en el carrito de compra.');
+
+                } else {
+
+                    factura.fechaCaducidadTarjeta = factura.fechaCaducidadTarjeta ? new Date(factura.fechaCaducidadTarjeta) : undefined;
+                    factura.fk_usuario = Number(req.session.user.id);
+                    factura.montoTotal = Number(factura.montoTotal);
+                    factura.direccionCliente = req.session.user.direccion;
+                    factura.fecha = new Date();
 
 
-                const respuestaFacturaCreada = await this._facturaService.registrarFactura(factura);
+                    const respuestaFacturaCreada = await this._facturaService.registrarFactura(factura);
 
-                this.librosCarrito.forEach(
-                    async libroCarrito => {
-                        await this._detalleFacturaService.registrarDetalle(libroCarrito.id, respuestaFacturaCreada.id, libroCarrito.cantidad);
-                    }
-                );
+                    this.librosCarrito.forEach(
+                        async libroCarrito => {
+                            await this._detalleFacturaService.registrarDetalle(libroCarrito.id, respuestaFacturaCreada.id, libroCarrito.cantidad);
+                        }
+                    );
 
-                this.librosCarrito = [];
-                this.librosCatalogo = [];
-                req.session.comprando = false;
+                    this.librosCarrito = [];
+                    this.librosCatalogo = [];
+                    req.session.comprando = false;
 
-                res.redirect('/factura/facturas');
+                    res.redirect('/factura/facturas');
+                }
 
             } else {
                 res.redirect('/usuario/login');
